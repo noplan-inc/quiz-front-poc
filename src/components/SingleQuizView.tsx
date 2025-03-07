@@ -90,12 +90,7 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
             <div className="w-full max-w-2xl mx-auto p-4 relative">
                 {/* クイズ全体のコンテナ（ヘッダー + 本体） */}
                 <div className="w-full quiz-container">
-                    {/* 問題番号表示 */}
-                    <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
-                        第{currentQuizIndex + 1}問
-                    </div>
-
-                    {/* クイズ表示エリア */}
+                    {/* クイズ表示エリア（ヘッダー + 本体をアニメーションで一緒に動かす） */}
                     <div className="relative">
                         <AnimatePresence mode="wait" custom={direction}>
                             <motion.div
@@ -115,6 +110,12 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
                                 }}
                                 className="w-full"
                             >
+                                {/* 問題番号表示（アニメーション内に移動） */}
+                                <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
+                                    第{currentQuizIndex + 1}問
+                                </div>
+
+                                {/* クイズ本体 */}
                                 <QuizItem
                                     {...currentQuiz}
                                     onAnswer={handleAnswer}
