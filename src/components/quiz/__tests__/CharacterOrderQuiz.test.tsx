@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import type { CharacterOrderQuizProps } from "@/types/quiz";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CharacterOrderQuiz } from "../CharacterOrderQuiz";
 
 // モック用の関数を定義

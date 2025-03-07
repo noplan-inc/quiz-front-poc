@@ -1,8 +1,8 @@
 import type { OrderSelectionQuizProps } from "@/types/quiz";
 import { useRef, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
+import type { DragSourceMonitor, DropTargetMonitor } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import type { DropTargetMonitor, DragSourceMonitor } from "react-dnd";
 
 /**
  * 順序選択問題を表示するコンポーネント

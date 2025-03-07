@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import type { CombinationQuizProps } from "@/types/quiz";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // CombinationQuizコンポーネントはまだ実装されていないためモックします
 vi.mock("../CombinationQuiz", () => ({
@@ -36,7 +36,7 @@ vi.mock("../CombinationQuiz", () => ({
                 onClick={() =>
                     onAnswer(
                         correctCombinations.map(
-                            (c) => c.leftId + "-" + c.rightId
+                            (c) => `${c.leftId}-${c.rightId}`
                         )
                     )
                 }
