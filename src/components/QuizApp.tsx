@@ -1,6 +1,6 @@
 import { sampleQuizzes } from "@/data/sampleQuizData";
 import type { QuizProps } from "@/types/quiz";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import QuizComplete from "./QuizComplete";
 import SingleQuizView from "./SingleQuizView";
 import DebugManager from "./debug/DebugManager";
