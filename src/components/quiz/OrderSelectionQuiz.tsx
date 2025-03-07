@@ -6,6 +6,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 /**
  * 順序選択問題を表示するコンポーネント
+ * ドラッグ&ドロップで項目を並べ替える
  */
 export const OrderSelectionQuiz: React.FC<
     OrderSelectionQuizProps & { imageUrl?: string; imageAlt?: string }
@@ -47,72 +48,92 @@ export const OrderSelectionQuiz: React.FC<
     };
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow">
-            {/* 問題文 */}
-            <h2 className="text-xl font-bold mb-4">{question}</h2>
+        <div className="w-full">
+            {/* クイズボックス */}
+            <div className="border-4 border-red-600 rounded-lg bg-white overflow-hidden flex flex-col">
+                {/* ヘッダー部分 */}
+                <div className="bg-red-600 p-3 text-white text-center font-bold">
+                    問題
+                </div>
 
-            {/* 画像があれば表示 */}
-            {imageUrl && (
-                <div className="mb-4">
-                    <img
-                        src={imageUrl}
-                        alt={imageAlt || "問題の画像"}
-                        className="max-w-full rounded"
-                    />
+                {/* 問題文と画像 */}
+                <div className="p-6">
+                    <h2 className="text-xl font-bold text-indigo-950 mb-4">
+                        {question}
+                    </h2>
+
+                    {/* 画像があれば表示 */}
+                    {imageUrl && (
+                        <div className="mb-6">
+                            <img
+                                src={imageUrl}
+                                alt={imageAlt || "問題の画像"}
+                                className="w-full h-auto rounded-md"
+                            />
+                        </div>
+                    )}
+
+                    {/* 並び替え可能なリスト */}
+                    <div className="mt-6">
+                        <p className="text-sm text-gray-600 mb-2">
+                            ※項目をドラッグ&ドロップして並べ替えてください
+                        </p>
+                        <DndProvider backend={HTML5Backend}>
+                            <div className="space-y-3">
+                                {items.map((item, index) => (
+                                    <DraggableItem
+                                        key={item.id}
+                                        id={item.id}
+                                        index={index}
+                                        text={item.text}
+                                        isAnswered={isAnswered}
+                                        isCorrect={
+                                            isAnswered &&
+                                            item.order === index + 1
+                                        }
+                                        moveItem={moveItem}
+                                    />
+                                ))}
+                            </div>
+                        </DndProvider>
+                    </div>
+                </div>
+            </div>
+
+            {/* 「つぎへ」ボタン（回答後に表示） */}
+            {isAnswered && (
+                <div className="mt-4 flex justify-end">
+                    <button
+                        type="button"
+                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
+                    >
+                        つぎへ
+                    </button>
                 </div>
             )}
 
-            {/* 選択肢 */}
-            <div className="mb-6">
-                <DndProvider backend={HTML5Backend}>
-                    <div className="space-y-2">
-                        {items.map((item, index) => (
-                            <DraggableItem
-                                key={item.id}
-                                id={item.id}
-                                index={index}
-                                text={item.text}
-                                isAnswered={isAnswered}
-                                isCorrect={
-                                    isAnswered && item.order === index + 1
-                                }
-                                moveItem={moveItem}
-                            />
-                        ))}
-                    </div>
-                </DndProvider>
-            </div>
-
-            {/* 回答ボタン */}
-            <div className="mt-4">
-                <button
-                    type="button"
-                    onClick={checkAnswer}
-                    disabled={isAnswered}
-                    className={`px-4 py-2 rounded font-medium ${
-                        isAnswered
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
-                >
-                    確認する
-                </button>
-
-                {/* 回答後のフィードバック */}
-                {isAnswered && (
-                    <div
-                        className={`mt-4 p-3 rounded ${
-                            isCorrect
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                        }`}
+            {/* 確認ボタン（回答前に表示） */}
+            {!isAnswered && (
+                <div className="mt-4 flex justify-end">
+                    <button
+                        type="button"
+                        onClick={checkAnswer}
+                        data-testid="submit-button"
+                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
                     >
-                        {isCorrect
-                            ? "正解です！正しい順序に並べることができました。"
-                            : "不正解です。もう一度挑戦してみましょう。"}
-                    </div>
-                )}
-            </div>
+                        確認
+                    </button>
+                </div>
+            )}
+
+            {/* 回答結果のフィードバック */}
+            {isAnswered && (
+                <div className="mt-4 p-3 rounded bg-gray-100">
+                    {isCorrect
+                        ? "正解です！"
+                        : "不正解です。正しい順序で並べ直してみましょう。"}
+                </div>
+            )}
         </div>
     );
 };
@@ -176,27 +197,24 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
     // ドラッグ中のスタイル
     const opacity = isDragging ? 0.5 : 1;
 
-    // 回答後のスタイル
-    let backgroundColor = "bg-white";
-    if (isAnswered) {
-        backgroundColor = isCorrect ? "bg-green-100" : "bg-red-100";
-    }
-
     return (
         <div
             ref={ref}
             draggable={!isAnswered}
-            className={`p-3 border rounded cursor-move flex items-center ${backgroundColor}`}
+            data-testid={`item-${id}`}
+            className={`p-3 rounded-md bg-indigo-950 text-white font-medium flex items-center justify-between cursor-move ${
+                isAnswered && isCorrect ? "border-2 border-green-500" : ""
+            } ${isAnswered && !isCorrect ? "border-2 border-red-500" : ""}`}
             style={{ opacity }}
         >
             <div className="flex-1">
-                <span className="font-medium">{text}</span>
+                <span className="font-bold">{text}</span>
             </div>
             {!isAnswered && (
-                <div className="text-gray-400">
+                <div className="text-white">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
+                        className="h-6 w-6"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
