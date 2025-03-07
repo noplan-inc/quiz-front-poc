@@ -1,7 +1,16 @@
 import type { OrderSelectionQuizProps } from "@/types/quiz";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { OrderSelectionQuiz } from "../OrderSelectionQuiz";
+import { OrderSelectionQuiz, isTouchDevice } from "../OrderSelectionQuiz";
+
+// isTouchDeviceをモック
+vi.mock("../OrderSelectionQuiz", async () => {
+    const actual = await vi.importActual("../OrderSelectionQuiz");
+    return {
+        ...actual,
+        isTouchDevice: () => false,
+    };
+});
 
 // モックを作成
 vi.mock("react-dnd", () => ({
@@ -19,15 +28,6 @@ vi.mock("react-dnd-html5-backend", () => ({
 vi.mock("react-dnd-touch-backend", () => ({
     TouchBackend: {},
 }));
-
-// isTouchDeviceをモック
-vi.mock("../OrderSelectionQuiz", async () => {
-    const actual = await vi.importActual("../OrderSelectionQuiz");
-    return {
-        ...actual,
-        isTouchDevice: () => false,
-    };
-});
 
 describe("OrderSelectionQuiz", () => {
     // テスト用のモックプロップス

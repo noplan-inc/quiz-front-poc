@@ -11,6 +11,12 @@ export const isTouchDevice = () => {
     return "ontouchstart" in window || navigator.maxTouchPoints > 0;
 };
 
+// TouchBackendのオプション
+const touchBackendOptions = {
+    enableMouseEvents: true, // マウスイベントも有効にする
+    delayTouchStart: 200, // タッチスタートの遅延（スクロールとの区別のため）
+};
+
 /**
  * 順序選択問題を表示するコンポーネント
  * ドラッグ&ドロップで項目を並べ替える
@@ -18,18 +24,8 @@ export const isTouchDevice = () => {
 export const OrderSelectionQuiz: React.FC<
     OrderSelectionQuizProps & { imageUrl?: string; imageAlt?: string }
 > = ({ question, choices, onAnswer, imageUrl, imageAlt }) => {
-    // デバイスタイプに基づいてバックエンドを選択
-    const [backend, setBackend] = useState(() =>
-        isTouchDevice() ? TouchBackend : HTML5Backend
-    );
-
-    // クライアントサイドでのみバックエンドを確認し直す
-    useEffect(() => {
-        // テスト環境ではuseEffectを実行しない
-        if (typeof window !== "undefined") {
-            setBackend(isTouchDevice() ? TouchBackend : HTML5Backend);
-        }
-    }, []);
+    // タッチデバイスかどうかを判定
+    const isTouch = isTouchDevice();
 
     // 並び替え可能な選択肢の状態
     const [items, setItems] = useState(() =>
@@ -67,13 +63,6 @@ export const OrderSelectionQuiz: React.FC<
         onAnswer(items.map((item) => item.id));
     };
 
-    // TouchBackendのオプション
-    const touchBackendOptions = {
-        enableMouseEvents: true, // マウスイベントも有効にする
-        enableTouchEvents: true, // タッチイベントを有効にする
-        delayTouchStart: 200, // タッチスタートの遅延（スクロールとの区別のため）
-    };
-
     return (
         <div className="w-full">
             {/* クイズボックス */}
@@ -101,12 +90,8 @@ export const OrderSelectionQuiz: React.FC<
                             ※項目をドラッグ&ドロップして並べ替えてください
                         </p>
                         <DndProvider
-                            backend={backend}
-                            options={
-                                backend === TouchBackend
-                                    ? touchBackendOptions
-                                    : undefined
-                            }
+                            backend={isTouch ? TouchBackend : HTML5Backend}
+                            options={isTouch ? touchBackendOptions : undefined}
                         >
                             <div className="space-y-3">
                                 {items.map((item, index) => (
@@ -121,7 +106,7 @@ export const OrderSelectionQuiz: React.FC<
                                             item.order === index + 1
                                         }
                                         moveItem={moveItem}
-                                        isTouch={backend === TouchBackend}
+                                        isTouch={isTouch}
                                     />
                                 ))}
                             </div>
