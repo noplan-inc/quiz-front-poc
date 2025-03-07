@@ -20,7 +20,19 @@
         "recommended": false
       }
     },
-    "ignore": ["node_modules", "coverage", "*.json", "*.md", "*.css"]
+    "ignore": [
+      "node_modules",
+      "coverage",
+      "dist",
+      "dist-ssr",
+      "*.json",
+      "*.md",
+      "*.css",
+      "vite.config.js",
+      "vite.config.d.ts",
+      "vite.config.d.ts.map",
+      "tsconfig.tsbuildinfo"
+    ]
   },
   "formatter": {
     "enabled": true,

@@ -33,30 +33,41 @@ describe("NumberInputQuiz", () => {
         cleanup();
     });
 
-    it("問題文と数字入力フィールドが正しく表示されること", () => {
+    it("問題文と数字表示エリアが正しく表示されること", () => {
         render(<NumberInputQuiz {...mockProps} />);
 
         // 問題文が表示されていることを確認
         expect(screen.getByText(mockProps.question)).toBeInTheDocument();
 
-        // 数字入力フィールドが表示されていることを確認
-        const input = screen.getByTestId("number-input");
-        expect(input).toBeInTheDocument();
-        expect(input).toHaveAttribute("type", "number");
+        // 数字表示エリアが表示されていることを確認
+        const display = screen.getByTestId("number-input-display");
+        expect(display).toBeInTheDocument();
 
-        // 最大桁数が正しく設定されていることを確認
-        expect(input).toHaveAttribute(
-            "max",
-            String(10 ** mockProps.maxDigits - 1)
+        // 削除ボタンが表示されていることを確認
+        const deleteButton = screen.getByText("削除");
+        expect(deleteButton).toBeInTheDocument();
+
+        // 数字キーパッドが表示されていることを確認
+        const numberButtons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) =>
+            String(num)
         );
+        for (const num of numberButtons) {
+            expect(screen.getByText(num)).toBeInTheDocument();
+        }
     });
 
     it("確認ボタンをクリックすると回答処理が呼ばれること", () => {
         render(<NumberInputQuiz {...mockProps} />);
 
-        // 入力フィールドに値を入力
-        const input = screen.getByTestId("number-input") as HTMLInputElement;
-        fireEvent.change(input, { target: { value: "1024" } });
+        // 数字ボタンをクリックして入力
+        fireEvent.click(screen.getByText("1"));
+        fireEvent.click(screen.getByText("0"));
+        fireEvent.click(screen.getByText("2"));
+        fireEvent.click(screen.getByText("4"));
+
+        // 数字表示エリアに入力値が表示されることを確認
+        const display = screen.getByTestId("number-input-display");
+        expect(display).toHaveTextContent("1024");
 
         // 回答ボタンを取得してクリック
         const submitButton = screen.getByTestId("submit-button");

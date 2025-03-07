@@ -18,26 +18,26 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
     onSelectChoice,
 }) => {
     return (
-        <div className="space-y-4 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {choices.map((choice) => {
                 const status = getChoiceStatus(choice);
 
                 let statusClass = "";
                 if (status === "correct") {
-                    statusClass = "border-green-500 bg-green-100";
+                    statusClass = "bg-green-600 border-green-700 text-white";
                 } else if (status === "incorrect") {
-                    statusClass = "border-red-500 bg-red-100";
+                    statusClass = "bg-red-600 border-red-700 text-white";
                 } else if (choice.id === selectedChoiceId) {
-                    statusClass = "border-blue-500 bg-blue-100";
+                    statusClass = "bg-blue-600 border-blue-700 text-white";
                 }
 
                 return (
                     <button
                         key={choice.id}
-                        className={`w-full p-4 border-2 rounded-lg text-left ${
+                        className={`w-full py-4 px-6 text-center rounded-md font-bold text-white bg-indigo-950 hover:bg-indigo-900 transition-colors ${
                             isAnswered
-                                ? "cursor-default"
-                                : "hover:bg-gray-100 cursor-pointer"
+                                ? "cursor-default opacity-90"
+                                : "cursor-pointer"
                         } ${statusClass}`}
                         onClick={() => onSelectChoice(choice.id)}
                         disabled={isAnswered}
@@ -47,7 +47,7 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                     >
                         {choice.text}
                         {isAnswered && choice.isCorrect && (
-                            <span className="ml-2 text-green-600">✓</span>
+                            <span className="ml-2">✓</span>
                         )}
                     </button>
                 );

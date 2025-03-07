@@ -4,6 +4,19 @@ import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import SingleQuizView from "../SingleQuizView";
 
+// framer-motionのモック
+vi.mock("framer-motion", () => ({
+    motion: {
+        div: ({
+            children,
+            ...props
+        }: React.PropsWithChildren<Record<string, unknown>>) => (
+            <div {...props}>{children}</div>
+        ),
+    },
+    AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
+}));
+
 // フルモックに切り替え
 vi.mock("../quiz", () => ({
     QuizItem: ({ onAnswer }: { onAnswer: (id: string) => void }) => (
@@ -19,18 +32,32 @@ vi.mock("../quiz", () => ({
     ),
 }));
 
-// framer-motionのモック
-vi.mock("framer-motion", () => ({
-    motion: {
-        div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-            <div {...props}>{children}</div>
-        ),
-    },
-    AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
+// フッターコンポーネントのモック
+vi.mock("../QuizFooter", () => ({
+    default: ({
+        answered,
+        onNext,
+    }: {
+        answered: boolean;
+        onNext: () => void;
+    }) => (
+        <div data-testid="mock-quiz-footer">
+            <div data-testid="mock-timer">00:00</div>
+            {answered && (
+                <button
+                    data-testid="next-button"
+                    onClick={onNext}
+                    type="button"
+                >
+                    つぎへ
+                </button>
+            )}
+        </div>
+    ),
 }));
 
-// setTimeoutのモック
 beforeEach(() => {
+    // タイマーをモック化
     vi.useFakeTimers();
 });
 
@@ -69,9 +96,10 @@ describe("SingleQuizViewコンポーネント", () => {
             <SingleQuizView quizzes={mockQuizzes} onComplete={mockOnComplete} />
         );
 
-        // 進行状況が表示されていることを確認
-        expect(screen.getByText("問題 1/2")).toBeInTheDocument();
+        // 進行状況が表示されていることを確認（新デザインでは「第1問」という表示に変更）
+        expect(screen.getByText(/第1問/)).toBeInTheDocument();
         expect(screen.getByTestId("mock-quiz-item")).toBeInTheDocument();
+        expect(screen.getByTestId("mock-quiz-footer")).toBeInTheDocument();
     });
 
     it("回答後に次の問題に自動的に遷移する", () => {
@@ -83,18 +111,19 @@ describe("SingleQuizViewコンポーネント", () => {
         // 回答ボタンをクリック
         fireEvent.click(screen.getByTestId("answer-button"));
 
-        // 最初のタイマーをスキップ (回答から次の問題への遷移)
-        act(() => {
-            vi.advanceTimersByTime(1000);
-        });
+        // 「つぎへ」ボタンが表示されることを確認
+        expect(screen.getByTestId("next-button")).toBeInTheDocument();
 
-        // 次のタイマーをスキップ (アニメーション時間)
+        // 「つぎへ」ボタンをクリック
+        fireEvent.click(screen.getByTestId("next-button"));
+
+        // アニメーション時間をスキップ
         act(() => {
             vi.advanceTimersByTime(500);
         });
 
-        // 2問目に進んだことを確認
-        expect(screen.getByText("問題 2/2")).toBeInTheDocument();
+        // 2問目に進んだことを確認（新デザインでは「第2問」という表示に変更）
+        expect(screen.getByText(/第2問/)).toBeInTheDocument();
     });
 
     it("全ての問題に回答後、onCompleteが呼ばれる", () => {
@@ -106,10 +135,10 @@ describe("SingleQuizViewコンポーネント", () => {
         // 1問目の回答
         fireEvent.click(screen.getByTestId("answer-button"));
 
-        // タイマーをスキップ
-        act(() => {
-            vi.advanceTimersByTime(1000);
-        });
+        // 「つぎへ」ボタンをクリック
+        fireEvent.click(screen.getByTestId("next-button"));
+
+        // アニメーション時間をスキップ
         act(() => {
             vi.advanceTimersByTime(500);
         });
@@ -117,9 +146,12 @@ describe("SingleQuizViewコンポーネント", () => {
         // 2問目の回答
         fireEvent.click(screen.getByTestId("answer-button"));
 
-        // タイマーをスキップ
+        // 「つぎへ」ボタンをクリック
+        fireEvent.click(screen.getByTestId("next-button"));
+
+        // アニメーション時間をスキップ
         act(() => {
-            vi.advanceTimersByTime(1000);
+            vi.advanceTimersByTime(500);
         });
 
         // onCompleteが呼ばれたことを確認

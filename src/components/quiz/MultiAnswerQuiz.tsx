@@ -1,14 +1,20 @@
 import type { MultiAnswerQuizProps } from "@/types/quiz";
 import { useState } from "react";
 
-export const MultiAnswerQuiz: React.FC<MultiAnswerQuizProps> = ({
-    question,
-    choices,
-    onAnswer,
-}) => {
+/**
+ * 複数選択クイズコンポーネント
+ * 複数の選択肢から正解をすべて選ぶ問題
+ */
+export const MultiAnswerQuiz: React.FC<
+    MultiAnswerQuizProps & { imageUrl?: string; imageAlt?: string }
+> = ({ question, choices, onAnswer, imageUrl, imageAlt }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [isAnswered, setIsAnswered] = useState(false);
 
+    // 選択肢の選択・解除
     const handleChoiceClick = (choiceId: string) => {
+        if (isAnswered) return;
+
         setSelectedIds((prev) => {
             if (prev.includes(choiceId)) {
                 return prev.filter((id) => id !== choiceId);
@@ -17,6 +23,7 @@ export const MultiAnswerQuiz: React.FC<MultiAnswerQuizProps> = ({
         });
     };
 
+    // キーボード操作対応
     const handleKeyDown = (e: React.KeyboardEvent, choiceId: string) => {
         if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -24,84 +31,88 @@ export const MultiAnswerQuiz: React.FC<MultiAnswerQuizProps> = ({
         }
     };
 
+    // 回答を確定
     const handleSubmit = () => {
         if (selectedIds.length > 0) {
+            setIsAnswered(true);
             onAnswer(selectedIds);
         }
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto">
-            <div className="mb-6">
-                <h3 className="text-xl font-semibold mb-4">{question}</h3>
-                <p className="text-sm text-gray-600 mb-4">※複数選択可能です</p>
-            </div>
+        <div className="w-full">
+            {/* クイズボックス */}
+            <div className="border-4 border-red-600 border-t-0 rounded-b-lg bg-white overflow-hidden flex flex-col">
+                {/* 問題文と画像 */}
+                <div className="p-6">
+                    <h2 className="text-xl font-bold text-indigo-950 mb-4">
+                        {question}
+                    </h2>
 
-            <div className="space-y-3 mb-6">
-                {choices.map((choice) => (
-                    <label
-                        key={choice.id}
-                        className={`p-3 rounded-md border-2 transition-all cursor-pointer block ${
-                            selectedIds.includes(choice.id)
-                                ? "border-blue-500 bg-blue-50"
-                                : "border-gray-200 hover:border-blue-300"
-                        }`}
-                        data-testid={
-                            selectedIds.includes(choice.id)
-                                ? "choice-selected"
-                                : "choice"
-                        }
-                    >
-                        <div className="flex items-center">
-                            <input
-                                type="checkbox"
-                                className="sr-only"
-                                checked={selectedIds.includes(choice.id)}
-                                onChange={() => handleChoiceClick(choice.id)}
-                                onKeyDown={(e) => handleKeyDown(e, choice.id)}
+                    {/* 画像があれば表示 */}
+                    {imageUrl && (
+                        <div className="mb-6">
+                            <img
+                                src={imageUrl}
+                                alt={imageAlt || "問題の画像"}
+                                className="w-full h-auto rounded-md"
                             />
-                            <div
-                                className={`w-5 h-5 mr-3 border-2 rounded flex items-center justify-center ${
-                                    selectedIds.includes(choice.id)
-                                        ? "border-blue-500 bg-blue-500"
-                                        : "border-gray-300"
-                                }`}
-                            >
-                                {selectedIds.includes(choice.id) && (
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="white"
-                                        className="w-4 h-4"
-                                        aria-hidden="true"
-                                    >
-                                        <title>選択済み</title>
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                )}
-                            </div>
-                            <span>{choice.text}</span>
                         </div>
-                    </label>
-                ))}
+                    )}
+
+                    {/* 選択肢 */}
+                    <div className="grid grid-cols-2 gap-4 mt-6">
+                        {choices.map((choice) => (
+                            <div key={choice.id} className="flex">
+                                <label
+                                    className="flex items-center w-full p-3 rounded-md bg-indigo-950 text-white cursor-pointer"
+                                    data-testid={
+                                        selectedIds.includes(choice.id)
+                                            ? "choice-selected"
+                                            : "choice"
+                                    }
+                                >
+                                    <div className="flex items-center w-full">
+                                        <div className="mr-2 w-6 h-6 flex-shrink-0 flex items-center justify-center bg-white rounded">
+                                            <input
+                                                type="checkbox"
+                                                className="w-4 h-4"
+                                                checked={selectedIds.includes(
+                                                    choice.id
+                                                )}
+                                                onChange={() =>
+                                                    handleChoiceClick(choice.id)
+                                                }
+                                                onKeyDown={(e) =>
+                                                    handleKeyDown(e, choice.id)
+                                                }
+                                            />
+                                        </div>
+                                        <span className="flex-1 text-center font-bold">
+                                            {choice.text}
+                                        </span>
+                                    </div>
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            <button
-                onClick={handleSubmit}
-                disabled={selectedIds.length === 0}
-                type="button"
-                className={`px-4 py-2 rounded-md ${
-                    selectedIds.length === 0
-                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-            >
-                回答する
-            </button>
+            {/* 確認ボタン（回答前に表示） */}
+            {!isAnswered && selectedIds.length > 0 && (
+                <div className="mt-4 flex justify-end">
+                    <button
+                        onClick={handleSubmit}
+                        disabled={selectedIds.length === 0}
+                        type="button"
+                        data-testid="submit-button"
+                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
+                    >
+                        確認
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

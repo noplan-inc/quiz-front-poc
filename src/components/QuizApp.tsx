@@ -1,6 +1,6 @@
 import { sampleQuizzes } from "@/data/sampleQuizData";
 import type { QuizProps } from "@/types/quiz";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QuizComplete from "./QuizComplete";
 import SingleQuizView from "./SingleQuizView";
 import DebugManager from "./debug/DebugManager";
@@ -20,12 +20,24 @@ const QuizApp: React.FC = () => {
     };
 
     const handleSelectQuiz = (quizId: string) => {
+        console.log("Selecting quiz in QuizApp:", quizId);
         const selectedIndex = quizzes.findIndex((quiz) => quiz.id === quizId);
         if (selectedIndex !== -1) {
+            console.log(
+                `Quiz found at index ${selectedIndex}, changing current index`
+            );
             setCurrentQuizIndex(selectedIndex);
             setIsCompleted(false);
+        } else {
+            console.log(`Quiz with id ${quizId} not found`);
         }
     };
+
+    // currentQuizIndexが変更されたら、ログを出力して確認
+    useEffect(() => {
+        console.log("Current quiz index changed:", currentQuizIndex);
+        console.log("Current quiz:", quizzes[currentQuizIndex]);
+    }, [currentQuizIndex, quizzes]);
 
     const quizzesToShow = quizzes.slice(currentQuizIndex);
 
