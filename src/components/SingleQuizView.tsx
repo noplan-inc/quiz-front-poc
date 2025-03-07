@@ -34,7 +34,6 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     const goToNextQuiz = () => {
         if (currentQuizIndex < quizzes.length - 1) {
             setDirection(1);
-
             // クイズ表示のアニメーションを開始
             setTimeout(() => {
                 setCurrentQuizIndex(currentQuizIndex + 1);

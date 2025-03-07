@@ -30,7 +30,7 @@ const AudioQuiz: React.FC<AudioQuizComponentProps> = ({
                 <audio
                     src={audioUrl}
                     controls
-                    className="w-full border-2 border-gray-300 rounded-lg"
+                    className="w-full"
                     data-testid="question-audio"
                 >
                     <track kind="captions" src="" label="日本語" />

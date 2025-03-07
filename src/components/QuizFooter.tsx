@@ -1,5 +1,6 @@
 import type React from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 
 interface QuizFooterProps {
     elapsedTime: number;
@@ -17,6 +18,16 @@ const QuizFooter: React.FC<QuizFooterProps> = ({
     answered,
     onNext,
 }) => {
+    // コンポーネントがマウントされた時にログを出力
+    useEffect(() => {
+        console.log("QuizFooterコンポーネントがマウントされました");
+
+        // アンマウント時のログ
+        return () => {
+            console.log("QuizFooterコンポーネントがアンマウントされました");
+        };
+    }, []);
+
     // 経過時間の表示形式
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);

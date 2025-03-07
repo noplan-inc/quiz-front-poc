@@ -34,7 +34,7 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                 return (
                     <button
                         key={choice.id}
-                        className={`w-full py-4 px-6 text-center rounded-md font-bold text-white bg-indigo-950 hover:bg-indigo-900 transition-colors ${
+                        className={`w-full py-4 px-6 text-center rounded-md font-bold text-white bg-indigo-950 hover:bg-indigo-900 transition-colors border-4 border-indigo-700 ${
                             isAnswered
                                 ? "cursor-default opacity-90"
                                 : "cursor-pointer"
