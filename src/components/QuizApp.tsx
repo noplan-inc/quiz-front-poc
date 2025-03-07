@@ -1,8 +1,8 @@
-import { useState } from "react";
-import type { QuizProps } from "@/types/quiz";
-import SingleQuizView from "./SingleQuizView";
-import QuizComplete from "./QuizComplete";
 import { sampleQuizzes } from "@/data/sampleQuizData";
+import type { QuizProps } from "@/types/quiz";
+import { useState } from "react";
+import QuizComplete from "./QuizComplete";
+import SingleQuizView from "./SingleQuizView";
 
 const QuizApp: React.FC = () => {
     const [quizzes] = useState<QuizProps[]>(sampleQuizzes);

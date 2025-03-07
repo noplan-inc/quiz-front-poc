@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, act, fireEvent } from "@testing-library/react";
-import React from "react";
-import SingleQuizView from "../SingleQuizView";
 import type { QuizProps } from "@/types/quiz";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import type React from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import SingleQuizView from "../SingleQuizView";
 
 // フルモックに切り替え
 vi.mock("../quiz", () => ({

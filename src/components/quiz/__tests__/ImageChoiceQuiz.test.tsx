@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { ImageChoiceQuiz } from "../ImageChoiceQuiz";
 import type { ImageChoiceQuizProps } from "@/types/quiz";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { ImageChoiceQuiz } from "../ImageChoiceQuiz";
 
 describe("ImageChoiceQuiz コンポーネント", () => {
     const mockOnAnswer = vi.fn();

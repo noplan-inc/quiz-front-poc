@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import type { QuizProps } from "@/types/quiz";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import { QuizItem } from "./quiz";
 
 interface SingleQuizViewProps {
@@ -14,7 +14,7 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
 }) => {
     const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
     const [direction, setDirection] = useState(0); // -1: 前へ, 0: 初期, 1: 次へ
-    const [answered, setAnswered] = useState(false);
+    const [_answered, setAnswered] = useState(false);
 
     // 現在表示中のクイズ
     const currentQuiz = quizzes[currentQuizIndex];
@@ -36,7 +36,7 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     };
 
     // 回答処理
-    const handleAnswer = (choiceId: string) => {
+    const handleAnswer = (_choiceId: string | string[]) => {
         setAnswered(true);
 
         // 回答から1秒後に次の問題へ
@@ -80,7 +80,7 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
                                         100
                                     }%`,
                                 }}
-                            ></div>
+                            />
                         </div>
                     </div>
                 </div>

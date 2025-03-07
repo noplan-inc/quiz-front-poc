@@ -1,4 +1,4 @@
-import type { TextQuizProps, Choice } from "@/types/quiz";
+import type { Choice, TextQuizProps } from "@/types/quiz";
 import ChoiceList, { type ChoiceStatus } from "./ChoiceList";
 
 interface TextQuizComponentProps extends TextQuizProps {

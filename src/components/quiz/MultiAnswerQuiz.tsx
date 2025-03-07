@@ -1,5 +1,5 @@
-import { useState } from "react";
 import type { MultiAnswerQuizProps } from "@/types/quiz";
+import { useState } from "react";
 
 export const MultiAnswerQuiz: React.FC<MultiAnswerQuizProps> = ({
     question,

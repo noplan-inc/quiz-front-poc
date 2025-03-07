@@ -1,12 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import type {
+    CharacterOrderQuizProps,
     Choice,
+    CombinationQuizProps,
     ImageChoice,
     MultiAnswerQuizProps,
-    OrderSelectionQuizProps,
-    CharacterOrderQuizProps,
-    CombinationQuizProps,
     NumberInputQuizProps,
+    OrderSelectionQuizProps,
     QuizProps,
 } from "../quiz";
 
