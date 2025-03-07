@@ -53,26 +53,26 @@ describe("MultiAnswerQuiz コンポーネント", () => {
         expect(screen.queryByTestId("choice-selected")).toBeNull();
     });
 
-    it("「回答する」ボタンをクリックするとonAnswerが呼ばれる", () => {
+    it("「確認」ボタンをクリックするとonAnswerが呼ばれる", () => {
         render(<MultiAnswerQuiz {...testProps} />);
 
         // 複数の選択肢を選択
         fireEvent.click(screen.getByText("選択肢A"));
         fireEvent.click(screen.getByText("選択肢C"));
 
-        // 回答するボタンをクリック
-        fireEvent.click(screen.getByText("回答する"));
+        // 確認ボタンをクリック
+        fireEvent.click(screen.getByTestId("submit-button"));
 
         // onAnswerが選択したIDの配列で呼ばれたことを確認
         expect(mockOnAnswer).toHaveBeenCalledTimes(1);
         expect(mockOnAnswer).toHaveBeenCalledWith(["a", "c"]);
     });
 
-    it("何も選択せずに「回答する」ボタンをクリックするとonAnswerは呼ばれない", () => {
+    it("何も選択せずに「確認」ボタンは表示されない", () => {
         render(<MultiAnswerQuiz {...testProps} />);
 
-        // 何も選択せずに回答するボタンをクリック
-        fireEvent.click(screen.getByText("回答する"));
+        // 確認ボタンが表示されていないことを確認
+        expect(screen.queryByTestId("submit-button")).toBeNull();
 
         // onAnswerが呼ばれないことを確認
         expect(mockOnAnswer).not.toHaveBeenCalled();
