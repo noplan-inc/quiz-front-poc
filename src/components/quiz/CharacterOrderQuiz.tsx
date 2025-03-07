@@ -63,7 +63,7 @@ export const CharacterOrderQuiz: React.FC<
         setAvailableChars([...availableChars, charObj]);
     };
 
-    // リセットボタン
+    // 全ての選択をリセット（削除ボタン）
     const resetSelection = () => {
         if (isAnswered) return;
 
@@ -92,134 +92,117 @@ export const CharacterOrderQuiz: React.FC<
     };
 
     return (
-        <div className="p-4 bg-white rounded-lg shadow">
-            {/* 問題文 */}
-            <h2 className="text-xl font-bold mb-4">{question}</h2>
+        <div className="w-full">
+            {/* クイズボックス */}
+            <div className="border-4 border-red-600 rounded-lg bg-white overflow-hidden flex flex-col">
+                {/* 問題文と画像 */}
+                <div className="p-6">
+                    <h2 className="text-xl font-bold text-indigo-950 mb-4">
+                        {question}
+                    </h2>
 
-            {/* 画像があれば表示 */}
-            {imageUrl && (
-                <div className="mb-4">
-                    <img
-                        src={imageUrl}
-                        alt={imageAlt || "問題の画像"}
-                        className="max-w-full rounded"
-                    />
-                </div>
-            )}
+                    {/* 画像があれば表示 */}
+                    {imageUrl && (
+                        <div className="mb-6">
+                            <img
+                                src={imageUrl}
+                                alt={imageAlt || "問題の画像"}
+                                className="w-full h-auto rounded-md"
+                            />
+                        </div>
+                    )}
 
-            {/* 現在の選択状態（ユーザーの回答） */}
-            <div
-                className="mb-6 p-4 border rounded bg-gray-50 min-h-16 flex items-center"
-                data-testid="answer-area"
-            >
-                {selectedChars.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                        {selectedChars.map((item) => (
+                    {/* 入力エリア（選択された文字を表示） */}
+                    <div className="flex justify-between mb-6">
+                        <div
+                            className="flex-1 flex items-center bg-gray-200 rounded-md min-h-16 p-2"
+                            data-testid="answer-area"
+                        >
+                            <div className="flex flex-wrap gap-2">
+                                {selectedChars.map((item) => (
+                                    <button
+                                        key={item.id}
+                                        type="button"
+                                        className="px-2 py-1 text-lg font-medium cursor-pointer hover:bg-gray-300 rounded"
+                                        onClick={() =>
+                                            !isAnswered && deselectChar(item.id)
+                                        }
+                                        disabled={isAnswered}
+                                        aria-label={`選択した文字「${item.char}」を削除`}
+                                    >
+                                        {item.char}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 削除ボタン */}
+                        <button
+                            type="button"
+                            onClick={resetSelection}
+                            disabled={
+                                isAnswered ||
+                                availableChars.length === characters.length
+                            }
+                            className="ml-2 px-4 py-2 rounded-md font-bold bg-indigo-950 text-white h-full"
+                        >
+                            削除
+                        </button>
+                    </div>
+
+                    {/* 利用可能な文字（選択肢） */}
+                    <div className="grid grid-cols-3 gap-4">
+                        {availableChars.map((item) => (
                             <button
                                 key={item.id}
                                 type="button"
-                                onClick={() => deselectChar(item.id)}
+                                data-testid={`char-${item.char}`}
+                                onClick={() => selectChar(item.id)}
                                 disabled={isAnswered}
-                                className={`
-                                    px-3 py-2 border rounded font-bold text-lg 
-                                    ${
-                                        isAnswered
-                                            ? isCorrect
-                                                ? "bg-green-100 border-green-300"
-                                                : "bg-red-100 border-red-300"
-                                            : "bg-blue-100 border-blue-300 hover:bg-blue-200"
-                                    }
-                                `}
+                                className="py-3 rounded-md font-bold text-xl bg-indigo-950 text-white hover:opacity-90"
                             >
                                 {item.char}
                             </button>
                         ))}
                     </div>
-                ) : (
-                    <span className="text-gray-500">
-                        ここに文字を並べてください
-                    </span>
-                )}
-            </div>
-
-            {/* 利用可能な文字 */}
-            <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-600 mb-2">
-                    利用可能な文字:
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                    {availableChars.map((item) => (
-                        <button
-                            key={item.id}
-                            type="button"
-                            data-testid={`char-${item.char}`}
-                            onClick={() => selectChar(item.id)}
-                            disabled={isAnswered}
-                            className="px-4 py-2 border rounded font-bold text-lg bg-white hover:bg-gray-100"
-                        >
-                            {item.char}
-                        </button>
-                    ))}
                 </div>
             </div>
 
-            {/* 操作ボタン */}
-            <div className="flex gap-3">
-                <button
-                    type="button"
-                    onClick={resetSelection}
-                    disabled={
-                        isAnswered ||
-                        availableChars.length === characters.length
-                    }
-                    className={`
-                        px-4 py-2 rounded font-medium 
-                        ${
-                            isAnswered ||
-                            availableChars.length === characters.length
-                                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                : "bg-yellow-500 text-white hover:bg-yellow-600"
-                        }
-                    `}
-                >
-                    リセット
-                </button>
+            {/* 「つぎへ」ボタン（回答後に表示） */}
+            {isAnswered && (
+                <div className="mt-4 flex justify-end">
+                    <button
+                        type="button"
+                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
+                    >
+                        つぎへ
+                    </button>
+                </div>
+            )}
 
-                <button
-                    type="button"
-                    data-testid="submit-button"
-                    onClick={checkAnswer}
-                    disabled={
-                        isAnswered ||
-                        selectedChars.length === 0 ||
-                        selectedChars.length !== characters.length
-                    }
-                    className={`
-                        px-4 py-2 rounded font-medium 
-                        ${
-                            isAnswered ||
+            {/* 確認ボタン（回答前に表示） */}
+            {!isAnswered && selectedChars.length > 0 && (
+                <div className="mt-4 flex justify-end">
+                    <button
+                        type="button"
+                        data-testid="submit-button"
+                        onClick={checkAnswer}
+                        disabled={
                             selectedChars.length === 0 ||
                             selectedChars.length !== characters.length
-                                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                : "bg-blue-500 text-white hover:bg-blue-600"
                         }
-                    `}
-                >
-                    確認
-                </button>
-            </div>
+                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
+                    >
+                        確認
+                    </button>
+                </div>
+            )}
 
-            {/* 回答後のフィードバック */}
+            {/* 回答結果のフィードバック（現在は表示されていませんが、必要に応じて追加） */}
             {isAnswered && (
-                <div
-                    className={`mt-4 p-3 rounded ${
-                        isCorrect
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                    }`}
-                >
+                <div className="mt-4 p-3 rounded bg-gray-100">
                     {isCorrect
-                        ? "正解です！正しく文字を並べることができました。"
+                        ? "正解です！"
                         : `不正解です。正解は「${correctAnswer}」です。`}
                 </div>
             )}
