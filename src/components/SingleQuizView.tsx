@@ -75,61 +75,63 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     };
 
     return (
-        <div className="min-h-screen flex flex-col relative">
-            {/* ストライプの背景パターン */}
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
+        <>
+            {/* 背景要素 - 常に表示 */}
+            <div className="fixed inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30 -z-10" />
 
-            {/* メインコンテンツエリア - フッターの高さ分のパディングを追加 */}
-            <div className="flex-grow flex items-center justify-center bg-white">
-                <div className="w-full max-w-2xl mx-auto p-4 relative pb-24">
-                    {/* クイズ全体のコンテナ */}
-                    <div className="w-full quiz-container">
-                        {/* クイズ表示エリア（本体のみをアニメーションで動かす） */}
-                        <div className="relative">
-                            <AnimatePresence mode="wait" custom={direction}>
-                                <motion.div
-                                    key={currentQuizIndex}
-                                    custom={direction}
-                                    variants={variants}
-                                    initial="enter"
-                                    animate="center"
-                                    exit="exit"
-                                    transition={{
-                                        x: {
-                                            type: "spring",
-                                            stiffness: 300,
-                                            damping: 30,
-                                        },
-                                        opacity: { duration: 0.2 },
-                                    }}
-                                    className="w-full"
-                                >
-                                    {/* 問題番号表示 */}
-                                    <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
-                                        第{currentQuizIndex + 1}問
-                                    </div>
+            {/* メインコンテンツエリア - フッターの高さ分のマージンを追加 */}
+            <div className="min-h-screen pb-24">
+                <div className="flex items-center justify-center bg-white h-full">
+                    <div className="w-full max-w-2xl mx-auto p-4 relative">
+                        {/* クイズ全体のコンテナ */}
+                        <div className="w-full quiz-container">
+                            {/* クイズ表示エリア - アニメーションで動かす */}
+                            <div className="relative">
+                                <AnimatePresence mode="wait" custom={direction}>
+                                    <motion.div
+                                        key={currentQuizIndex}
+                                        custom={direction}
+                                        variants={variants}
+                                        initial="enter"
+                                        animate="center"
+                                        exit="exit"
+                                        transition={{
+                                            x: {
+                                                type: "spring",
+                                                stiffness: 300,
+                                                damping: 30,
+                                            },
+                                            opacity: { duration: 0.2 },
+                                        }}
+                                        className="w-full"
+                                    >
+                                        {/* 問題番号表示 */}
+                                        <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
+                                            第{currentQuizIndex + 1}問
+                                        </div>
 
-                                    {/* クイズ本体 */}
-                                    <QuizItem
-                                        {...currentQuiz}
-                                        onAnswer={handleAnswer}
-                                    />
-                                </motion.div>
-                            </AnimatePresence>
+                                        {/* クイズ本体 */}
+                                        <QuizItem
+                                            {...currentQuiz}
+                                            onAnswer={handleAnswer}
+                                        />
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* フッターコンポーネント - 固定位置で常に表示 */}
-            <div className="sticky bottom-0 left-0 right-0 z-50">
+            <div className="fixed bottom-0 left-0 right-0 z-50">
                 <QuizFooter
                     elapsedTime={elapsedTime}
                     answered={answered}
                     onNext={handleNext}
                 />
             </div>
-        </div>
+        </>
     );
 };
 
