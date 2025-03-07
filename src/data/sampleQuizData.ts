@@ -145,18 +145,15 @@ export const sampleQuizzes: QuizProps[] = [
         onAnswer: () => {},
     },
 
-    // 9. 音声付きの問題 (別バージョン)
+    // 9. 数字入力問題
     {
         id: "9",
-        type: "audio",
-        question: "この音声で説明されているのは何についてですか？",
-        audioUrl: "https://www.w3schools.com/tags/horse.ogg",
-        choices: [
-            { id: "a", text: "プログラミング言語", isCorrect: false },
-            { id: "b", text: "データベース", isCorrect: false },
-            { id: "c", text: "動物の鳴き声", isCorrect: true },
-            { id: "d", text: "自然環境", isCorrect: false },
-        ],
+        type: "numberInput",
+        question: "2^10 = ?",
+        correctAnswer: 1024,
+        maxDigits: 4,
+        imageUrl: "https://picsum.photos/id/237/500/300",
+        imageAlt: "計算のイメージ",
         onAnswer: () => {},
     },
 

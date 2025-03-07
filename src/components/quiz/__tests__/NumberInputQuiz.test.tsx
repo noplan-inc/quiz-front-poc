@@ -1,50 +1,16 @@
 import type { NumberInputQuizProps } from "@/types/quiz";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { NumberInputQuiz } from "../NumberInputQuiz";
 
-// NumberInputQuizコンポーネントはまだ実装されていないためモックします
-vi.mock("../NumberInputQuiz", () => ({
-    NumberInputQuiz: ({
-        question,
-        maxDigits,
-        onAnswer,
-        imageUrl,
-        imageAlt,
-    }: NumberInputQuizProps & { imageUrl?: string; imageAlt?: string }) => {
-        const handleSubmit = () => {
-            const input = document.querySelector(
-                'input[data-testid="number-input"]'
-            ) as HTMLInputElement;
-            const answer = Number.parseInt(input.value, 10);
-            onAnswer(String(answer));
-        };
-
-        return (
-            <div data-testid="number-input-quiz">
-                <h2>{question}</h2>
-                {imageUrl && (
-                    <img src={imageUrl} alt={imageAlt || "問題の画像"} />
-                )}
-                <div>
-                    <input
-                        type="number"
-                        data-testid="number-input"
-                        defaultValue="0"
-                        min="0"
-                        max={10 ** maxDigits - 1}
-                    />
-                </div>
-                <button
-                    type="button"
-                    data-testid="submit-button"
-                    onClick={handleSubmit}
-                >
-                    確認
-                </button>
-            </div>
-        );
-    },
-}));
+// モック用の関数を定義
+vi.mock("react", async () => {
+    const actual = await vi.importActual("react");
+    return {
+        ...actual,
+        // 必要に応じてReactの関数をモック
+    };
+});
 
 describe("NumberInputQuiz", () => {
     // テスト用のモックプロップス
