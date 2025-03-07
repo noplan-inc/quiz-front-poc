@@ -1,0 +1,280 @@
+---
+description: description: TypeScriptとReactを使用したプロジェクトのコーディング規約、ベストプラクティス、コンポーネント設計、パフォーマンス最適化、テスト、命名規則などを包括的に定義するガイドラインです。
+globs: *.tsx
+alwaysApply: false
+---
+
+# TSXルール
+
+このルールは、TypeScriptとReactを使用したプロジェクトのコーディング規約とベストプラクティスを定義します。
+
+## 主な内容
+
+- コンポーネントの命名規則
+- 型定義のガイドライン
+- ファイル構造の推奨事項
+- コードスタイルの統一
+
+## 使用例
+
+```tsx
+// コンポーネントの命名は PascalCase
+const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+  // ...
+};
+
+// 型定義は明確に
+interface UserProfileProps {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+```
+
+## 注意事項
+
+- すべてのコンポーネントは型定義を持つこと
+- ファイル名はコンポーネント名と一致させる
+- インポート文は整理して配置する
+
+# React ベストプラクティス
+
+## コンポーネントの設計
+
+### 1. コンポーネントの分割と配置
+- 1つのコンポーネントは1つの責務を持つ
+- 関連するファイル（スタイル、テスト、型定義）は同じディレクトリに配置
+- 再利用可能なコンポーネントは`components`ディレクトリに配置
+- ページ固有のコンポーネントは`pages`ディレクトリに配置
+
+### 2. Propsの扱い
+- Propsは読み取り専用として扱う（不変性を保つ）
+- 必要なPropsのみを渡す（過剰なPropsの受け渡しを避ける）
+- Propsの型定義は必ず行う
+- デフォルト値は適切に設定する
+
+```tsx
+// 良い例
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+}
+
+const Button: React.FC<ButtonProps> = ({ 
+  label, 
+  onClick, 
+  disabled = false 
+}) => {
+  return (
+    <button onClick={onClick} disabled={disabled}>
+      {label}
+    </button>
+  );
+};
+
+// 悪い例
+const Button = (props) => {
+  return <button {...props}>{props.label}</button>;
+};
+```
+
+### 3. ステート管理
+- ローカルステートは`useState`で管理
+- 複雑なステート更新は`useReducer`を使用
+- ステートは必要最小限に保つ
+- ステートの更新は関数形式で行う
+
+```tsx
+// 良い例
+const [count, setCount] = useState(0);
+setCount(prev => prev + 1);
+
+// 悪い例
+setCount(count + 1); // 非同期更新の問題が発生する可能性
+```
+
+### 4. 副作用の管理
+- 副作用は`useEffect`で管理
+- 依存配列は必ず指定する
+- クリーンアップ関数を適切に実装
+- 副作用は必要最小限に抑える
+
+```tsx
+// 良い例
+useEffect(() => {
+  const subscription = data.subscribe();
+  return () => subscription.unsubscribe();
+}, [data]);
+
+// 悪い例
+useEffect(() => {
+  // 依存配列なし
+  console.log('effect');
+});
+```
+
+## パフォーマンス最適化
+
+### 1. メモ化の活用
+- 不要な再レンダリングを防ぐため、`useMemo`と`useCallback`を適切に使用
+- メモ化は必要な場合のみ行う（過剰なメモ化は避ける）
+
+```tsx
+// 良い例
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+const memoizedCallback = useCallback(() => doSomething(a, b), [a, b]);
+
+// 悪い例
+const memoizedValue = useMemo(() => simpleValue, []); // 単純な値のメモ化は不要
+```
+
+### 2. レンダリングの最適化
+- 大きなリストは`React.memo`でラップ
+- キーは安定した値を使用
+- インライン関数の使用を避ける
+
+```tsx
+// 良い例
+const MemoizedComponent = React.memo(({ data }) => (
+  <div>{data}</div>
+));
+
+// 悪い例
+const Component = ({ data }) => (
+  <div>{data}</div>
+);
+```
+
+## コードの品質
+
+### 1. エラーハンドリング
+- エラーバウンダリを適切に使用
+- ユーザーフレンドリーなエラーメッセージを表示
+- エラー状態の適切な管理
+
+```tsx
+// 良い例
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>エラーが発生しました。</h1>;
+    }
+    return this.props.children;
+  }
+}
+```
+
+### 2. アクセシビリティ
+- セマンティックなHTML要素を使用
+- ARIA属性を適切に使用
+- キーボード操作のサポート
+- スクリーンリーダー対応
+
+```tsx
+// 良い例
+<button
+  aria-label="閉じる"
+  onClick={handleClose}
+  onKeyDown={handleKeyDown}
+>
+  ×
+</button>
+
+// 悪い例
+<div onClick={handleClose}>×</div>
+```
+
+### 3. テスト
+- コンポーネントのテストを書く
+- ユーザーインタラクションのテスト
+- エッジケースのテスト
+- スナップショットテストの活用
+
+```tsx
+// 良い例
+describe('Button', () => {
+  it('クリック時にonClickが呼ばれる', () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick} label="テスト" />);
+    fireEvent.click(screen.getByText('テスト'));
+    expect(handleClick).toHaveBeenCalled();
+  });
+});
+```
+
+## 命名規則
+
+### 1. コンポーネント
+- PascalCaseで命名
+- 機能を表す名前にする
+- 接頭辞は避ける
+
+```tsx
+// 良い例
+const UserProfile = () => {};
+const NavigationMenu = () => {};
+
+// 悪い例
+const MyComponent = () => {};
+const Component1 = () => {};
+```
+
+### 2. 関数と変数
+- camelCaseで命名
+- 動詞で始める（関数）
+- 名詞で始める（変数）
+
+```tsx
+// 良い例
+const handleSubmit = () => {};
+const userData = {};
+
+// 悪い例
+const submit = () => {};
+const data = {};
+```
+
+## コメントとドキュメント
+
+### 1. コメント
+- 複雑なロジックの説明
+- 非自明な判断の理由
+- TODOやFIXMEの使用
+
+```tsx
+// 良い例
+// ユーザーの権限に基づいて表示を制御
+const canEdit = user.role === 'admin' && !isReadOnly;
+
+// 悪い例
+// ユーザーが管理者の場合に編集可能
+const canEdit = user.role === 'admin' && !isReadOnly;
+```
+
+### 2. 型定義
+- インターフェースと型の適切な使用
+- 共通の型は別ファイルに定義
+- 型の再利用性を考慮
+
+```tsx
+// 良い例
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+type UserRole = 'admin' | 'user' | 'guest';
+
+// 悪い例
+type User = any;
+```
