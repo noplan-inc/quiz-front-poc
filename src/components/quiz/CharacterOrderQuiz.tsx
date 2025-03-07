@@ -8,13 +8,20 @@ import { useState } from "react";
 export const CharacterOrderQuiz: React.FC<
     CharacterOrderQuizProps & { imageUrl?: string; imageAlt?: string }
 > = ({ question, characters, correctAnswer, onAnswer, imageUrl, imageAlt }) => {
-    // 利用可能な文字を管理
-    const [availableChars, setAvailableChars] = useState<string[]>([
-        ...characters,
-    ]);
+    // 利用可能な文字を管理（各文字にIDを付与）
+    const [availableChars, setAvailableChars] = useState<
+        Array<{ id: string; char: string }>
+    >(() =>
+        characters.map((char) => ({
+            id: `available-${char}-${Math.random().toString(36).substr(2, 9)}`,
+            char,
+        }))
+    );
 
-    // 選択された文字を順に管理
-    const [selectedChars, setSelectedChars] = useState<string[]>([]);
+    // 選択された文字を順に管理（各文字にユニークなIDを付与）
+    const [selectedChars, setSelectedChars] = useState<
+        Array<{ id: string; char: string }>
+    >([]);
 
     // 回答済みかどうか
     const [isAnswered, setIsAnswered] = useState(false);
@@ -23,45 +30,58 @@ export const CharacterOrderQuiz: React.FC<
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
     // 文字を選択
-    const selectChar = (char: string, index: number) => {
+    const selectChar = (id: string) => {
         if (isAnswered) return;
 
+        // 選択する文字を取得
+        const charObj = availableChars.find((item) => item.id === id);
+        if (!charObj) return;
+
         // 選択された文字を追加
-        setSelectedChars([...selectedChars, char]);
+        setSelectedChars([...selectedChars, charObj]);
 
         // 利用可能な文字から削除
-        const newAvailableChars = [...availableChars];
-        newAvailableChars.splice(index, 1);
+        const newAvailableChars = availableChars.filter(
+            (item) => item.id !== id
+        );
         setAvailableChars(newAvailableChars);
     };
 
     // 選択した文字を取り消す
-    const deselectChar = (index: number) => {
+    const deselectChar = (id: string) => {
         if (isAnswered) return;
 
-        // 取り消す文字を取得
-        const char = selectedChars[index];
+        // 取り消す文字オブジェクトを取得
+        const charObj = selectedChars.find((item) => item.id === id);
+        if (!charObj) return;
 
         // 選択された文字から削除
-        const newSelectedChars = [...selectedChars];
-        newSelectedChars.splice(index, 1);
+        const newSelectedChars = selectedChars.filter((item) => item.id !== id);
         setSelectedChars(newSelectedChars);
 
         // 利用可能な文字に戻す
-        setAvailableChars([...availableChars, char]);
+        setAvailableChars([...availableChars, charObj]);
     };
 
     // リセットボタン
     const resetSelection = () => {
         if (isAnswered) return;
 
-        setAvailableChars([...characters]);
+        // 初期状態に戻す
+        setAvailableChars(
+            characters.map((char) => ({
+                id: `available-${char}-${Math.random()
+                    .toString(36)
+                    .substr(2, 9)}`,
+                char,
+            }))
+        );
         setSelectedChars([]);
     };
 
     // 回答を確認
     const checkAnswer = () => {
-        const userAnswer = selectedChars.join("");
+        const userAnswer = selectedChars.map((item) => item.char).join("");
         const isAnswerCorrect = userAnswer === correctAnswer;
 
         setIsCorrect(isAnswerCorrect);
@@ -94,11 +114,11 @@ export const CharacterOrderQuiz: React.FC<
             >
                 {selectedChars.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
-                        {selectedChars.map((char, index) => (
+                        {selectedChars.map((item) => (
                             <button
-                                key={`selected-${index}`}
+                                key={item.id}
                                 type="button"
-                                onClick={() => deselectChar(index)}
+                                onClick={() => deselectChar(item.id)}
                                 disabled={isAnswered}
                                 className={`
                                     px-3 py-2 border rounded font-bold text-lg 
@@ -111,7 +131,7 @@ export const CharacterOrderQuiz: React.FC<
                                     }
                                 `}
                             >
-                                {char}
+                                {item.char}
                             </button>
                         ))}
                     </div>
@@ -128,16 +148,16 @@ export const CharacterOrderQuiz: React.FC<
                     利用可能な文字:
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                    {availableChars.map((char, index) => (
+                    {availableChars.map((item) => (
                         <button
-                            key={`char-${char}-${index}`}
+                            key={item.id}
                             type="button"
-                            data-testid={`char-${char}`}
-                            onClick={() => selectChar(char, index)}
+                            data-testid={`char-${item.char}`}
+                            onClick={() => selectChar(item.id)}
                             disabled={isAnswered}
                             className="px-4 py-2 border rounded font-bold text-lg bg-white hover:bg-gray-100"
                         >
-                            {char}
+                            {item.char}
                         </button>
                     ))}
                 </div>

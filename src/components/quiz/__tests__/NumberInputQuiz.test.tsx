@@ -1,12 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import type { NumberInputQuizProps } from "@/types/quiz";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // NumberInputQuizコンポーネントはまだ実装されていないためモックします
 vi.mock("../NumberInputQuiz", () => ({
     NumberInputQuiz: ({
         question,
-        correctAnswer,
         maxDigits,
         onAnswer,
         imageUrl,
@@ -16,7 +15,7 @@ vi.mock("../NumberInputQuiz", () => ({
             const input = document.querySelector(
                 'input[data-testid="number-input"]'
             ) as HTMLInputElement;
-            const answer = parseInt(input.value, 10);
+            const answer = Number.parseInt(input.value, 10);
             onAnswer(String(answer));
         };
 
@@ -32,7 +31,7 @@ vi.mock("../NumberInputQuiz", () => ({
                         data-testid="number-input"
                         defaultValue="0"
                         min="0"
-                        max={Math.pow(10, maxDigits) - 1}
+                        max={10 ** maxDigits - 1}
                     />
                 </div>
                 <button
@@ -82,7 +81,7 @@ describe("NumberInputQuiz", () => {
         // 最大桁数が正しく設定されていることを確認
         expect(input).toHaveAttribute(
             "max",
-            String(Math.pow(10, mockProps.maxDigits) - 1)
+            String(10 ** mockProps.maxDigits - 1)
         );
     });
 
