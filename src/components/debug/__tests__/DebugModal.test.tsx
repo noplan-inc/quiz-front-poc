@@ -1,4 +1,3 @@
-import type { QuizProps } from "@/types/quiz";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import DebugModal from "../DebugModal";
