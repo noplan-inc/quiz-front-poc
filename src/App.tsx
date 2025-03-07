@@ -1,12 +1,12 @@
 import "./App.css";
-import QuizDemo from "./components/QuizDemo";
+import QuizApp from "./components/QuizApp";
 
 function App() {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <QuizDemo />
-    </div>
-  );
+    return (
+        <div className="font-sans">
+            <QuizApp />
+        </div>
+    );
 }
 
 export default App;

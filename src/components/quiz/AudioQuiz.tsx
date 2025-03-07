@@ -18,15 +18,15 @@ const AudioQuiz: React.FC<AudioQuizComponentProps> = ({
     onSelectChoice,
 }) => {
     return (
-        <div className="p-6 border rounded-lg shadow-sm">
+        <div className="p-6 border rounded-lg shadow-sm bg-white max-h-[60vh] overflow-hidden flex flex-col">
             <h3
-                className="text-xl font-semibold mb-4"
+                className="text-xl font-semibold mb-2 max-h-[15vh] overflow-auto"
                 data-testid="question-text"
             >
                 {question}
             </h3>
 
-            <div className="my-4">
+            <div className="my-2 flex-shrink-0">
                 <audio
                     src={audioUrl}
                     controls
@@ -38,13 +38,15 @@ const AudioQuiz: React.FC<AudioQuizComponentProps> = ({
                 </audio>
             </div>
 
-            <ChoiceList
-                choices={choices}
-                selectedChoiceId={selectedChoiceId}
-                isAnswered={isAnswered}
-                getChoiceStatus={getChoiceStatus}
-                onSelectChoice={onSelectChoice}
-            />
+            <div className="flex-grow overflow-auto mt-2">
+                <ChoiceList
+                    choices={choices}
+                    selectedChoiceId={selectedChoiceId}
+                    isAnswered={isAnswered}
+                    getChoiceStatus={getChoiceStatus}
+                    onSelectChoice={onSelectChoice}
+                />
+            </div>
         </div>
     );
 };
