@@ -19,7 +19,7 @@ const TextQuiz: React.FC<TextQuizComponentProps> = ({
     return (
         <div className="w-full">
             {/* クイズボックス */}
-            <div className="border-4 border-red-600 rounded-lg bg-white overflow-hidden flex flex-col">
+            <div className="border-4 border-red-600 border-t-0 rounded-b-lg bg-white overflow-hidden flex flex-col">
                 {/* 問題文と選択肢 */}
                 <div className="p-4">
                     <h3

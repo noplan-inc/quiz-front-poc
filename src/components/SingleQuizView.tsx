@@ -88,37 +88,40 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
             <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
 
             <div className="w-full max-w-2xl mx-auto p-4 relative">
-                {/* 問題番号表示 */}
-                <div className="bg-red-600 text-white font-bold py-2 px-4 mb-4 text-center rounded-t-lg">
-                    第{currentQuizIndex + 1}問
-                </div>
+                {/* クイズ全体のコンテナ（ヘッダー + 本体） */}
+                <div className="w-full quiz-container">
+                    {/* 問題番号表示 */}
+                    <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
+                        第{currentQuizIndex + 1}問
+                    </div>
 
-                {/* クイズ表示エリア */}
-                <div className="relative">
-                    <AnimatePresence mode="wait" custom={direction}>
-                        <motion.div
-                            key={currentQuizIndex}
-                            custom={direction}
-                            variants={variants}
-                            initial="enter"
-                            animate="center"
-                            exit="exit"
-                            transition={{
-                                x: {
-                                    type: "spring",
-                                    stiffness: 300,
-                                    damping: 30,
-                                },
-                                opacity: { duration: 0.2 },
-                            }}
-                            className="w-full"
-                        >
-                            <QuizItem
-                                {...currentQuiz}
-                                onAnswer={handleAnswer}
-                            />
-                        </motion.div>
-                    </AnimatePresence>
+                    {/* クイズ表示エリア */}
+                    <div className="relative">
+                        <AnimatePresence mode="wait" custom={direction}>
+                            <motion.div
+                                key={currentQuizIndex}
+                                custom={direction}
+                                variants={variants}
+                                initial="enter"
+                                animate="center"
+                                exit="exit"
+                                transition={{
+                                    x: {
+                                        type: "spring",
+                                        stiffness: 300,
+                                        damping: 30,
+                                    },
+                                    opacity: { duration: 0.2 },
+                                }}
+                                className="w-full"
+                            >
+                                <QuizItem
+                                    {...currentQuiz}
+                                    onAnswer={handleAnswer}
+                                />
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
                 </div>
 
                 {/* フッター部分: タイマーと次へボタン */}
