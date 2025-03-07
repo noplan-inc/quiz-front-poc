@@ -170,4 +170,33 @@ export const sampleQuizzes: QuizProps[] = [
         ],
         onAnswer: () => {},
     },
+
+    // 11. 組み合わせ選択問題
+    {
+        id: "11",
+        type: "combination",
+        question:
+            "プログラミング言語と、その主な用途を正しく組み合わせてください",
+        leftItems: [
+            { id: "a1", text: "JavaScript" },
+            { id: "a2", text: "Python" },
+            { id: "a3", text: "C++" },
+            { id: "a4", text: "SQL" },
+        ],
+        rightItems: [
+            { id: "b1", text: "Webフロントエンド開発" },
+            { id: "b2", text: "データ分析・AI" },
+            { id: "b3", text: "システム・ゲーム開発" },
+            { id: "b4", text: "データベース操作" },
+        ],
+        correctCombinations: [
+            { leftId: "a1", rightId: "b1" },
+            { leftId: "a2", rightId: "b2" },
+            { leftId: "a3", rightId: "b3" },
+            { leftId: "a4", rightId: "b4" },
+        ],
+        imageUrl: "https://picsum.photos/id/0/500/300",
+        imageAlt: "プログラミング言語の組み合わせ問題",
+        onAnswer: () => {},
+    },
 ];

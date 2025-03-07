@@ -3,6 +3,7 @@ import { useState } from "react";
 import AudioQuiz from "./AudioQuiz";
 import { CharacterOrderQuiz } from "./CharacterOrderQuiz";
 import type { ChoiceStatus } from "./ChoiceList";
+import { CombinationQuiz } from "./CombinationQuiz";
 import { ImageChoiceQuiz } from "./ImageChoiceQuiz";
 import ImageQuiz from "./ImageQuiz";
 import { MultiAnswerQuiz } from "./MultiAnswerQuiz";
@@ -24,8 +25,6 @@ import VideoQuiz from "./VideoQuiz";
  * - orderSelection: 順序選択問題
  * - characterOrder: 文字の順序選択問題
  * - numberInput: 数字入力問題
- *
- * 【未実装のクイズタイプ】
  * - combination: 組み合わせ選択問題
  *
  * 注意: 未実装のクイズタイプを使用すると「未対応の問題タイプです」エラーが表示されます。
@@ -91,17 +90,14 @@ const QuizItem: React.FC<QuizProps> = (props) => {
         case "numberInput":
             return <NumberInputQuiz {...props} />;
 
-        // 未実装のクイズタイプ - 今後実装する予定のものをコメントとして残す
-        // case "combination":
-        //   return <CombinationQuiz {...props} />;
+        case "combination":
+            return <CombinationQuiz {...props} />;
 
         default:
             // 未対応の種類の問題
             return (
                 <div className="py-4">
-                    <p className="text-red-500">
-                        未対応の問題タイプです: {props.type}
-                    </p>
+                    <p className="text-red-500">未対応の問題タイプです</p>
                 </div>
             );
     }
