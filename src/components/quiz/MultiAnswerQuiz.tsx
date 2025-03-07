@@ -99,18 +99,6 @@ export const MultiAnswerQuiz: React.FC<
                 </div>
             </div>
 
-            {/* 「つぎへ」ボタン（回答後に表示） */}
-            {isAnswered && (
-                <div className="mt-4 flex justify-end">
-                    <button
-                        type="button"
-                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
-                    >
-                        つぎへ
-                    </button>
-                </div>
-            )}
-
             {/* 確認ボタン（回答前に表示） */}
             {!isAnswered && selectedIds.length > 0 && (
                 <div className="mt-4 flex justify-end">
