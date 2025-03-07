@@ -1,8 +1,4 @@
-import type {
-    CombinationItem,
-    CombinationPair,
-    CombinationQuizProps,
-} from "@/types/quiz";
+import type { CombinationPair, CombinationQuizProps } from "@/types/quiz";
 import { useState } from "react";
 
 /**
