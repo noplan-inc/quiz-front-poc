@@ -66,6 +66,7 @@ const DebugModal: React.FC<DebugModalProps> = ({
 
     // クイズが選択されたとき
     const handleQuizSelect = (quizId: string) => {
+        console.log("Quiz selected:", quizId);
         onSelectQuiz(quizId);
         onClose();
     };
@@ -138,9 +139,17 @@ const DebugModal: React.FC<DebugModalProps> = ({
                         {filteredQuizzes.map((quiz) => (
                             <button
                                 key={quiz.id}
-                                className="p-3 border rounded hover:bg-gray-50 cursor-pointer w-full text-left"
-                                onClick={() => handleQuizSelect(quiz.id)}
+                                className="p-3 border rounded hover:bg-gray-50 cursor-pointer w-full text-left flex flex-col"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log(
+                                        `Button clicked for quiz: ${quiz.id}`
+                                    );
+                                    handleQuizSelect(quiz.id);
+                                }}
                                 type="button"
+                                data-testid={`quiz-item-${quiz.id}`}
                             >
                                 <div className="flex justify-between">
                                     <span className="font-medium">
