@@ -4,6 +4,7 @@ import TextQuiz from "./TextQuiz";
 import ImageQuiz from "./ImageQuiz";
 import VideoQuiz from "./VideoQuiz";
 import AudioQuiz from "./AudioQuiz";
+import { ChoiceStatus } from "./ChoiceList";
 
 /**
  * 問題タイプに応じたコンポーネントを表示するラッパーコンポーネント
@@ -23,7 +24,7 @@ export const QuizItem: React.FC<QuizProps> = (props) => {
     };
 
     // 選択された選択肢が正解かどうかを判定
-    const getChoiceStatus = (choice: Choice) => {
+    const getChoiceStatus = (choice: Choice): ChoiceStatus => {
         if (!isAnswered) return "default";
         if (choice.isCorrect) return "correct";
         if (choice.id === selectedChoiceId && !choice.isCorrect)
@@ -31,9 +32,8 @@ export const QuizItem: React.FC<QuizProps> = (props) => {
         return "default";
     };
 
-    // 共通のPropsを作成
+    // 共通のPropsを作成（onSelectChoiceとgetChoiceStatusはすべてのコンポーネントで共有）
     const commonProps = {
-        ...props,
         selectedChoiceId,
         isAnswered,
         getChoiceStatus,
@@ -43,13 +43,13 @@ export const QuizItem: React.FC<QuizProps> = (props) => {
     // 問題タイプに応じたコンポーネントを返す
     switch (props.type) {
         case "text":
-            return <TextQuiz {...commonProps} />;
+            return <TextQuiz {...props} {...commonProps} />;
         case "image":
-            return <ImageQuiz {...commonProps} />;
+            return <ImageQuiz {...props} {...commonProps} />;
         case "video":
-            return <VideoQuiz {...commonProps} />;
+            return <VideoQuiz {...props} {...commonProps} />;
         case "audio":
-            return <AudioQuiz {...commonProps} />;
+            return <AudioQuiz {...props} {...commonProps} />;
         default:
             return null;
     }
