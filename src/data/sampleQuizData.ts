@@ -1,36 +1,21 @@
 import type { QuizProps } from "@/types/quiz";
 
 export const sampleQuizzes: QuizProps[] = [
-    // テキストクイズ（4択）
+    // タイプ0: 一問一答(2択) - テキスト問題文
     {
-        id: "1",
+        id: "0-1",
         type: "text",
         question: "JavaScriptの拡張言語はどれですか？",
         choices: [
             { id: "a", text: "TypeScript", isCorrect: true },
             { id: "b", text: "CoffeeScript", isCorrect: false },
-            { id: "c", text: "Dart", isCorrect: false },
-            { id: "d", text: "Ruby", isCorrect: false },
         ],
         onAnswer: () => {},
     },
 
-    // テキストクイズ（3択）
+    // タイプ0: 一問一答(2択) - テキスト&画像問題
     {
-        id: "2",
-        type: "text",
-        question: "Reactの開発元は？",
-        choices: [
-            { id: "a", text: "Google", isCorrect: false },
-            { id: "b", text: "Facebook（Meta）", isCorrect: true },
-            { id: "c", text: "Microsoft", isCorrect: false },
-        ],
-        onAnswer: () => {},
-    },
-
-    // 画像クイズ（4択）
-    {
-        id: "3",
+        id: "0-2",
         type: "image",
         question: "この画像はどの都市の風景ですか？",
         imageUrl: "https://picsum.photos/id/1018/600/400",
@@ -38,29 +23,13 @@ export const sampleQuizzes: QuizProps[] = [
         choices: [
             { id: "a", text: "東京", isCorrect: false },
             { id: "b", text: "京都", isCorrect: true },
-            { id: "c", text: "大阪", isCorrect: false },
-            { id: "d", text: "札幌", isCorrect: false },
         ],
         onAnswer: () => {},
     },
 
-    // 画像クイズ（2択）
+    // タイプ0: 一問一答(2択) - テキスト&動画問題
     {
-        id: "4",
-        type: "image",
-        question: "この建物の名前は？",
-        imageUrl: "https://picsum.photos/id/1040/600/400",
-        imageAlt: "有名な建物",
-        choices: [
-            { id: "a", text: "エッフェル塔", isCorrect: true },
-            { id: "b", text: "東京タワー", isCorrect: false },
-        ],
-        onAnswer: () => {},
-    },
-
-    // 動画クイズ（3択）
-    {
-        id: "5",
+        id: "0-3",
         type: "video",
         question: "このビデオでは何について説明していますか？",
         videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
@@ -68,30 +37,13 @@ export const sampleQuizzes: QuizProps[] = [
         choices: [
             { id: "a", text: "プログラミング言語", isCorrect: false },
             { id: "b", text: "自然の風景", isCorrect: true },
-            { id: "c", text: "宇宙探査", isCorrect: false },
         ],
         onAnswer: () => {},
     },
 
-    // 動画クイズ（4択）
+    // タイプ0: 一問一答(2択) - テキスト&音声問題
     {
-        id: "6",
-        type: "video",
-        question: "この動画に登場する動物は何ですか？",
-        videoUrl: "https://www.w3schools.com/html/movie.mp4",
-        poster: "https://www.w3schools.com/images/w3schools_logo_436_2.png",
-        choices: [
-            { id: "a", text: "ライオン", isCorrect: false },
-            { id: "b", text: "ウサギ", isCorrect: true },
-            { id: "c", text: "クマ", isCorrect: false },
-            { id: "d", text: "キリン", isCorrect: false },
-        ],
-        onAnswer: () => {},
-    },
-
-    // 音声クイズ（2択）
-    {
-        id: "7",
+        id: "0-4",
         type: "audio",
         question: "この音声で聞こえる楽器は何ですか？",
         audioUrl: "https://www.w3schools.com/html/horse.mp3",
@@ -102,25 +54,55 @@ export const sampleQuizzes: QuizProps[] = [
         onAnswer: () => {},
     },
 
-    // 音声クイズ（4択）
+    // タイプ1: 一問一答(2択) 選択肢が画像ver - テキスト問題文
     {
-        id: "8",
-        type: "audio",
-        question: "この音声はどの動物の鳴き声ですか？",
-        audioUrl:
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        id: "1-1",
+        type: "imageChoice",
+        question: "正しいロゴはどちらですか？",
         choices: [
-            { id: "a", text: "イヌ", isCorrect: false },
-            { id: "b", text: "ネコ", isCorrect: false },
-            { id: "c", text: "ウマ", isCorrect: true },
-            { id: "d", text: "トリ", isCorrect: false },
+            {
+                id: "a",
+                imageUrl:
+                    "https://www.w3schools.com/images/w3schools_logo_436_2.png",
+                imageAlt: "W3Schoolsロゴ",
+                isCorrect: true,
+            },
+            {
+                id: "b",
+                imageUrl: "https://picsum.photos/id/237/200/100",
+                imageAlt: "別のロゴ",
+                isCorrect: false,
+            },
         ],
         onAnswer: () => {},
     },
 
-    // テキストクイズ（4択）
+    // タイプ1: 一問一答(2択) 選択肢が画像ver - テキスト&音声問題
     {
-        id: "9",
+        id: "1-2",
+        type: "imageChoice",
+        question: "この音声に最も関連する画像はどちらですか？",
+        audioUrl: "https://www.w3schools.com/html/horse.mp3",
+        choices: [
+            {
+                id: "a",
+                imageUrl: "https://picsum.photos/id/237/200/200",
+                imageAlt: "犬の画像",
+                isCorrect: false,
+            },
+            {
+                id: "b",
+                imageUrl: "https://picsum.photos/id/1074/200/200",
+                imageAlt: "馬の画像",
+                isCorrect: true,
+            },
+        ],
+        onAnswer: () => {},
+    },
+
+    // タイプ2: 一問一答(4択) - テキスト問題文
+    {
+        id: "2-1",
         type: "text",
         question: "次のうち、日本の首都はどれですか？",
         choices: [
@@ -132,20 +114,48 @@ export const sampleQuizzes: QuizProps[] = [
         onAnswer: () => {},
     },
 
-    // テキストクイズ（4択）
+    // タイプ2: 一問一答(4択) - テキスト&画像問題
     {
-        id: "10",
-        type: "text",
-        question: "HTMLの略称として正しいものは？",
+        id: "2-2",
+        type: "image",
+        question: "この画像はどの動物ですか？",
+        imageUrl: "https://picsum.photos/id/237/400/300",
+        imageAlt: "動物の写真",
         choices: [
-            { id: "a", text: "Hyper Text Markup Language", isCorrect: true },
-            { id: "b", text: "High Tech Modern Language", isCorrect: false },
-            { id: "c", text: "Home Tool Markup Language", isCorrect: false },
-            {
-                id: "d",
-                text: "Hyperlinks and Text Markup Language",
-                isCorrect: false,
-            },
+            { id: "a", text: "猫", isCorrect: false },
+            { id: "b", text: "犬", isCorrect: true },
+            { id: "c", text: "うさぎ", isCorrect: false },
+            { id: "d", text: "ハムスター", isCorrect: false },
+        ],
+        onAnswer: () => {},
+    },
+
+    // タイプ4: 一問多答(4択) - テキスト問題文
+    {
+        id: "4-1",
+        type: "multiAnswer",
+        question: "次のうち、果物はどれですか？（複数選択可）",
+        choices: [
+            { id: "a", text: "りんご", isCorrect: true },
+            { id: "b", text: "トマト", isCorrect: true },
+            { id: "c", text: "じゃがいも", isCorrect: false },
+            { id: "d", text: "キュウリ", isCorrect: false },
+        ],
+        onAnswer: () => {},
+    },
+
+    // タイプ4: 一問多答(4択) - テキスト&画像問題
+    {
+        id: "4-2",
+        type: "multiAnswer",
+        question: "この画像の中に含まれるものをすべて選んでください",
+        imageUrl: "https://picsum.photos/id/1084/400/300",
+        imageAlt: "風景写真",
+        choices: [
+            { id: "a", text: "山", isCorrect: true },
+            { id: "b", text: "川", isCorrect: true },
+            { id: "c", text: "建物", isCorrect: false },
+            { id: "d", text: "自動車", isCorrect: false },
         ],
         onAnswer: () => {},
     },

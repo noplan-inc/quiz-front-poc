@@ -1,15 +1,17 @@
-import type { Choice, QuizProps } from "@/types/quiz";
 import { useState } from "react";
-import AudioQuiz from "./AudioQuiz";
-import type { ChoiceStatus } from "./ChoiceList";
-import ImageQuiz from "./ImageQuiz";
+import type { Choice, QuizProps } from "@/types/quiz";
 import TextQuiz from "./TextQuiz";
+import ImageQuiz from "./ImageQuiz";
 import VideoQuiz from "./VideoQuiz";
+import AudioQuiz from "./AudioQuiz";
+import { ImageChoiceQuiz } from "./ImageChoiceQuiz";
+import { MultiAnswerQuiz } from "./MultiAnswerQuiz";
+import type { ChoiceStatus } from "./ChoiceList";
 
 /**
  * 問題タイプに応じたコンポーネントを表示するラッパーコンポーネント
  */
-export const QuizItem: React.FC<QuizProps> = (props) => {
+const QuizItem: React.FC<QuizProps> = (props) => {
     const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(
         null
     );
@@ -44,13 +46,42 @@ export const QuizItem: React.FC<QuizProps> = (props) => {
     switch (props.type) {
         case "text":
             return <TextQuiz {...props} {...commonProps} />;
+
         case "image":
             return <ImageQuiz {...props} {...commonProps} />;
+
         case "video":
             return <VideoQuiz {...props} {...commonProps} />;
+
         case "audio":
             return <AudioQuiz {...props} {...commonProps} />;
+
+        case "imageChoice":
+            return <ImageChoiceQuiz {...props} />;
+
+        case "multiAnswer":
+            return <MultiAnswerQuiz {...props} />;
+
+        // 他のクイズタイプが実装されたら、ここに追加
+        // case "orderSelection":
+        //   return <OrderSelectionQuiz {...props} />;
+        // case "characterOrder":
+        //   return <CharacterOrderQuiz {...props} />;
+        // case "combination":
+        //   return <CombinationQuiz {...props} />;
+        // case "numberInput":
+        //   return <NumberInputQuiz {...props} />;
+
         default:
-            return null;
+            // 未対応の種類の問題
+            return (
+                <div className="py-4">
+                    <p className="text-red-500">
+                        未対応の問題タイプです: {props.type}
+                    </p>
+                </div>
+            );
     }
 };
+
+export default QuizItem;
