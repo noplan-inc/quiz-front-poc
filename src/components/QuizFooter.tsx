@@ -1,4 +1,5 @@
 import type React from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface QuizFooterProps {
     elapsedTime: number;
@@ -26,7 +27,7 @@ const QuizFooter: React.FC<QuizFooterProps> = ({
     };
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white">
+        <div className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white z-10">
             <div className="max-w-2xl mx-auto px-4 py-2 flex justify-between items-center">
                 {/* タイマー */}
                 <div className="bg-gray-200 rounded-full py-2 px-6 flex items-center">
@@ -51,16 +52,24 @@ const QuizFooter: React.FC<QuizFooterProps> = ({
                     </span>
                 </div>
 
-                {/* 次へボタン - 回答後のみ表示 */}
-                {answered && (
-                    <button
-                        onClick={onNext}
-                        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-md transition-colors"
-                        type="button"
-                    >
-                        つぎへ
-                    </button>
-                )}
+                {/* 次へボタン - アニメーション付き */}
+                <div className="min-w-[120px] flex justify-end">
+                    <AnimatePresence>
+                        {answered && (
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.3 }}
+                                onClick={onNext}
+                                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-md transition-colors"
+                                type="button"
+                            >
+                                つぎへ
+                            </motion.button>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
         </div>
     );

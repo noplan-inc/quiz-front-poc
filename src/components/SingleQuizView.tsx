@@ -30,15 +30,6 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
         return () => clearInterval(timer);
     }, []);
 
-    // 経過時間の表示形式
-    const formatTime = (seconds: number) => {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins.toString().padStart(2, "0")}:${secs
-            .toString()
-            .padStart(2, "0")}`;
-    };
-
     // 次の問題へ
     const goToNextQuiz = () => {
         if (currentQuizIndex < quizzes.length - 1) {
@@ -84,50 +75,53 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white pb-16">
-            {/* ストライプの背景パターン */}
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
+        <div className="min-h-screen flex flex-col">
+            {/* メインコンテンツエリア */}
+            <div className="flex-grow flex items-center justify-center bg-white pb-20">
+                {/* ストライプの背景パターン */}
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
 
-            <div className="w-full max-w-2xl mx-auto p-4 relative">
-                {/* クイズ全体のコンテナ（ヘッダー + 本体） */}
-                <div className="w-full quiz-container">
-                    {/* クイズ表示エリア（ヘッダー + 本体をアニメーションで一緒に動かす） */}
-                    <div className="relative">
-                        <AnimatePresence mode="wait" custom={direction}>
-                            <motion.div
-                                key={currentQuizIndex}
-                                custom={direction}
-                                variants={variants}
-                                initial="enter"
-                                animate="center"
-                                exit="exit"
-                                transition={{
-                                    x: {
-                                        type: "spring",
-                                        stiffness: 300,
-                                        damping: 30,
-                                    },
-                                    opacity: { duration: 0.2 },
-                                }}
-                                className="w-full"
-                            >
-                                {/* 問題番号表示（アニメーション内に移動） */}
-                                <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
-                                    第{currentQuizIndex + 1}問
-                                </div>
+                <div className="w-full max-w-2xl mx-auto p-4 relative">
+                    {/* クイズ全体のコンテナ（ヘッダー + 本体） */}
+                    <div className="w-full quiz-container">
+                        {/* クイズ表示エリア（ヘッダー + 本体をアニメーションで一緒に動かす） */}
+                        <div className="relative">
+                            <AnimatePresence mode="wait" custom={direction}>
+                                <motion.div
+                                    key={currentQuizIndex}
+                                    custom={direction}
+                                    variants={variants}
+                                    initial="enter"
+                                    animate="center"
+                                    exit="exit"
+                                    transition={{
+                                        x: {
+                                            type: "spring",
+                                            stiffness: 300,
+                                            damping: 30,
+                                        },
+                                        opacity: { duration: 0.2 },
+                                    }}
+                                    className="w-full"
+                                >
+                                    {/* 問題番号表示（アニメーション内に移動） */}
+                                    <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
+                                        第{currentQuizIndex + 1}問
+                                    </div>
 
-                                {/* クイズ本体 */}
-                                <QuizItem
-                                    {...currentQuiz}
-                                    onAnswer={handleAnswer}
-                                />
-                            </motion.div>
-                        </AnimatePresence>
+                                    {/* クイズ本体 */}
+                                    <QuizItem
+                                        {...currentQuiz}
+                                        onAnswer={handleAnswer}
+                                    />
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* フッターコンポーネント */}
+            {/* フッターコンポーネント - 固定位置で常に表示 */}
             <QuizFooter
                 elapsedTime={elapsedTime}
                 answered={answered}

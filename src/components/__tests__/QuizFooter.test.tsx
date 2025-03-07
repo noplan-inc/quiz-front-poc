@@ -2,6 +2,22 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import QuizFooter from "../QuizFooter";
 
+// framer-motionのモック
+vi.mock("framer-motion", () => ({
+    motion: {
+        button: ({
+            children,
+            onClick,
+            ...props
+        }: React.PropsWithChildren<{ onClick: () => void }>) => (
+            <button onClick={onClick} data-testid="motion-button" {...props}>
+                {children}
+            </button>
+        ),
+    },
+    AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
+}));
+
 describe("QuizFooterコンポーネント", () => {
     it("タイマーが正しく表示される", () => {
         render(
@@ -37,7 +53,7 @@ describe("QuizFooterコンポーネント", () => {
         );
 
         // 「つぎへ」ボタンをクリック
-        fireEvent.click(screen.getByText("つぎへ"));
+        fireEvent.click(screen.getByTestId("motion-button"));
 
         // onNext関数が呼ばれたことを確認
         expect(mockOnNext).toHaveBeenCalledTimes(1);
