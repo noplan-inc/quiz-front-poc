@@ -140,7 +140,7 @@ export const CombinationQuiz: React.FC<
     return (
         <div className="w-full" data-testid="combination-quiz">
             {/* クイズボックス */}
-            <div className="border-4 border-red-600 rounded-lg bg-white overflow-hidden flex flex-col">
+            <div className="border-4 border-red-600 border-t-0 rounded-b-lg bg-white overflow-hidden flex flex-col">
                 {/* 問題文と画像 */}
                 <div className="p-6">
                     <h2 className="text-xl font-bold text-indigo-950 mb-4">

@@ -23,7 +23,7 @@ export const ImageChoiceQuiz: React.FC<ImageChoiceQuizProps> = ({
     return (
         <div className="w-full">
             {/* クイズボックス */}
-            <div className="border-4 border-red-600 rounded-lg bg-white overflow-hidden flex flex-col">
+            <div className="border-4 border-red-600 border-t-0 rounded-b-lg bg-white overflow-hidden flex flex-col">
                 {/* 問題文 */}
                 <div className="p-6">
                     <h3 className="text-xl font-bold text-indigo-950 mb-6">
