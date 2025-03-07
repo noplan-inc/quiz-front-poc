@@ -16,6 +16,19 @@ vi.mock("react-dnd-html5-backend", () => ({
     HTML5Backend: {},
 }));
 
+vi.mock("react-dnd-touch-backend", () => ({
+    TouchBackend: {},
+}));
+
+// isTouchDeviceをモック
+vi.mock("../OrderSelectionQuiz", async () => {
+    const actual = await vi.importActual("../OrderSelectionQuiz");
+    return {
+        ...actual,
+        isTouchDevice: () => false,
+    };
+});
+
 describe("OrderSelectionQuiz", () => {
     // テスト用のモックプロップス
     const mockProps: OrderSelectionQuizProps = {

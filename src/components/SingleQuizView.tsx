@@ -1,8 +1,8 @@
 import type { QuizProps } from "@/types/quiz";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { QuizItem } from "./quiz";
 import QuizFooter from "./QuizFooter";
+import { QuizItem } from "./quiz";
 
 interface SingleQuizViewProps {
     quizzes: QuizProps[];

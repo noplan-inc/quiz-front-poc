@@ -1,8 +1,15 @@
 import type { OrderSelectionQuizProps } from "@/types/quiz";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import type { DragSourceMonitor, DropTargetMonitor } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+
+// タッチデバイスかどうかを判定する関数
+export const isTouchDevice = () => {
+    if (typeof window === "undefined") return false;
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+};
 
 /**
  * 順序選択問題を表示するコンポーネント
@@ -11,6 +18,19 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 export const OrderSelectionQuiz: React.FC<
     OrderSelectionQuizProps & { imageUrl?: string; imageAlt?: string }
 > = ({ question, choices, onAnswer, imageUrl, imageAlt }) => {
+    // デバイスタイプに基づいてバックエンドを選択
+    const [backend, setBackend] = useState(() =>
+        isTouchDevice() ? TouchBackend : HTML5Backend
+    );
+
+    // クライアントサイドでのみバックエンドを確認し直す
+    useEffect(() => {
+        // テスト環境ではuseEffectを実行しない
+        if (typeof window !== "undefined") {
+            setBackend(isTouchDevice() ? TouchBackend : HTML5Backend);
+        }
+    }, []);
+
     // 並び替え可能な選択肢の状態
     const [items, setItems] = useState(() =>
         // ランダムな順序で初期化（初期表示では順番をシャッフル）
@@ -47,6 +67,13 @@ export const OrderSelectionQuiz: React.FC<
         onAnswer(items.map((item) => item.id));
     };
 
+    // TouchBackendのオプション
+    const touchBackendOptions = {
+        enableMouseEvents: true, // マウスイベントも有効にする
+        enableTouchEvents: true, // タッチイベントを有効にする
+        delayTouchStart: 200, // タッチスタートの遅延（スクロールとの区別のため）
+    };
+
     return (
         <div className="w-full">
             {/* クイズボックス */}
@@ -73,7 +100,14 @@ export const OrderSelectionQuiz: React.FC<
                         <p className="text-sm text-gray-600 mb-2">
                             ※項目をドラッグ&ドロップして並べ替えてください
                         </p>
-                        <DndProvider backend={HTML5Backend}>
+                        <DndProvider
+                            backend={backend}
+                            options={
+                                backend === TouchBackend
+                                    ? touchBackendOptions
+                                    : undefined
+                            }
+                        >
                             <div className="space-y-3">
                                 {items.map((item, index) => (
                                     <DraggableItem
@@ -87,6 +121,7 @@ export const OrderSelectionQuiz: React.FC<
                                             item.order === index + 1
                                         }
                                         moveItem={moveItem}
+                                        isTouch={backend === TouchBackend}
                                     />
                                 ))}
                             </div>
@@ -129,6 +164,7 @@ interface DraggableItemProps {
     isAnswered: boolean;
     isCorrect: boolean;
     moveItem: (dragIndex: number, hoverIndex: number) => void;
+    isTouch: boolean;
 }
 
 const DraggableItem: React.FC<DraggableItemProps> = ({
@@ -138,6 +174,7 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
     isAnswered,
     isCorrect,
     moveItem,
+    isTouch,
 }) => {
     const ref = useRef<HTMLDivElement>(null);
 
@@ -183,12 +220,13 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
     return (
         <div
             ref={ref}
-            draggable={!isAnswered}
             data-testid={`item-${id}`}
-            className={`p-3 rounded-md bg-indigo-950 text-white font-medium flex items-center justify-between cursor-move ${
-                isAnswered && isCorrect ? "border-2 border-green-500" : ""
-            } ${isAnswered && !isCorrect ? "border-2 border-red-500" : ""}`}
-            style={{ opacity }}
+            className={`p-3 rounded-md bg-indigo-950 text-white font-medium flex items-center justify-between ${
+                !isAnswered && "cursor-move"
+            } ${isAnswered && isCorrect ? "border-2 border-green-500" : ""} ${
+                isAnswered && !isCorrect ? "border-2 border-red-500" : ""
+            }`}
+            style={{ opacity, touchAction: isTouch ? "none" : undefined }}
         >
             <div className="flex-1">
                 <span className="font-bold">{text}</span>
