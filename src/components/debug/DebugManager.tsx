@@ -63,7 +63,7 @@ const DebugManager: React.FC<DebugManagerProps> = ({ onSelectQuiz }) => {
 
             {/* デバッグ表示（開発環境のみ） */}
             {isDevelopment && (
-                <div className="fixed bottom-2 right-2 z-40">
+                <div className="fixed top-2 right-2 z-40">
                     <button
                         type="button"
                         onClick={() => setIsModalOpen(true)}

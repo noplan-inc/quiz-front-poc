@@ -2,6 +2,7 @@ import type { QuizProps } from "@/types/quiz";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { QuizItem } from "./quiz";
+import QuizFooter from "./QuizFooter";
 
 interface SingleQuizViewProps {
     quizzes: QuizProps[];
@@ -83,7 +84,7 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="min-h-screen flex items-center justify-center bg-white pb-16">
             {/* ストライプの背景パターン */}
             <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
 
@@ -124,44 +125,14 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
                         </AnimatePresence>
                     </div>
                 </div>
-
-                {/* フッター部分: タイマーと次へボタン */}
-                <div className="mt-6 flex justify-between items-center">
-                    {/* タイマー */}
-                    <div className="bg-gray-200 rounded-full py-2 px-6 flex items-center">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 mr-2 text-gray-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-label="タイマー"
-                        >
-                            <title>タイマーアイコン</title>
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        <span className="font-mono font-bold">
-                            {formatTime(elapsedTime)}
-                        </span>
-                    </div>
-
-                    {/* 次へボタン */}
-                    {answered && (
-                        <button
-                            onClick={handleNext}
-                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-md transition-colors"
-                            type="button"
-                        >
-                            つぎへ
-                        </button>
-                    )}
-                </div>
             </div>
+
+            {/* フッターコンポーネント */}
+            <QuizFooter
+                elapsedTime={elapsedTime}
+                answered={answered}
+                onNext={handleNext}
+            />
         </div>
     );
 };
