@@ -3,9 +3,11 @@ import { useState } from "react";
 import { QuizItem } from "./quiz";
 
 const QuizDemo = () => {
-    const [, setSelectedAnswers] = useState<Record<string, string>>({});
+    const [, setSelectedAnswers] = useState<Record<string, string | string[]>>(
+        {}
+    );
 
-    const handleAnswer = (quizId: string, choiceId: string) => {
+    const handleAnswer = (quizId: string, choiceId: string | string[]) => {
         setSelectedAnswers((prev) => ({
             ...prev,
             [quizId]: choiceId,

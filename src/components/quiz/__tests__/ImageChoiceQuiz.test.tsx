@@ -1,6 +1,6 @@
 import type { ImageChoiceQuizProps } from "@/types/quiz";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ImageChoiceQuiz } from "../ImageChoiceQuiz";
 
 describe("ImageChoiceQuiz コンポーネント", () => {

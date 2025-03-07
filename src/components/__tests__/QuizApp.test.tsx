@@ -1,4 +1,3 @@
-import { sampleQuizzes } from "@/data/sampleQuizData";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import QuizApp from "../QuizApp";
