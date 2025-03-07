@@ -1,6 +1,7 @@
 import type { Choice, QuizProps } from "@/types/quiz";
 import { useState } from "react";
 import AudioQuiz from "./AudioQuiz";
+import { CharacterOrderQuiz } from "./CharacterOrderQuiz";
 import type { ChoiceStatus } from "./ChoiceList";
 import { ImageChoiceQuiz } from "./ImageChoiceQuiz";
 import ImageQuiz from "./ImageQuiz";
@@ -20,9 +21,9 @@ import VideoQuiz from "./VideoQuiz";
  * - imageChoice: 選択肢が画像の問題
  * - multiAnswer: 複数回答可能な問題
  * - orderSelection: 順序選択問題
+ * - characterOrder: 文字の順序選択問題
  *
  * 【未実装のクイズタイプ】
- * - characterOrder: 文字の順序選択問題
  * - combination: 組み合わせ選択問題
  * - numberInput: 数字入力問題
  *
@@ -83,9 +84,10 @@ const QuizItem: React.FC<QuizProps> = (props) => {
         case "orderSelection":
             return <OrderSelectionQuiz {...props} />;
 
+        case "characterOrder":
+            return <CharacterOrderQuiz {...props} />;
+
         // 未実装のクイズタイプ - 今後実装する予定のものをコメントとして残す
-        // case "characterOrder":
-        //   return <CharacterOrderQuiz {...props} />;
         // case "combination":
         //   return <CombinationQuiz {...props} />;
         // case "numberInput":

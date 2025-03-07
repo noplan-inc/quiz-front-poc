@@ -131,20 +131,17 @@ export const sampleQuizzes: QuizProps[] = [
         onAnswer: () => {},
     },
 
-    // 8. 画像付きの順序選択問題
+    // 8. 文字の順序選択問題
     {
         id: "8",
-        type: "orderSelection",
-        question: "ソフトウェア開発のステップを正しい順序に並べてください",
-        imageUrl: "https://picsum.photos/id/0/500/300",
-        imageAlt: "ソフトウェア開発の図",
-        choices: [
-            { id: "a", text: "要件定義", order: 1 },
-            { id: "b", text: "設計", order: 2 },
-            { id: "c", text: "実装", order: 3 },
-            { id: "d", text: "テスト", order: 4 },
-            { id: "e", text: "デプロイ", order: 5 },
-        ],
+        type: "characterOrder",
+        question:
+            "次の文字を並べ替えて、正しいプログラミング言語の名前を作ってください",
+        characters: ["P", "Y", "T", "H", "O", "N"],
+        correctAnswer: "PYTHON",
+        imageUrl:
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/200px-Python-logo-notext.svg.png",
+        imageAlt: "Pythonのロゴ",
         onAnswer: () => {},
     },
 
