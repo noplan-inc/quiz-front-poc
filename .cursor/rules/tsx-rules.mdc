@@ -38,6 +38,7 @@ interface UserProfileProps {
 - すべてのコンポーネントは型定義を持つこと
 - ファイル名はコンポーネント名と一致させる
 - インポート文は整理して配置する
+- 基本的にdefault exportは悪
 
 # React ベストプラクティス
 

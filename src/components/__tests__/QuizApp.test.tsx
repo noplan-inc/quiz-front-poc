@@ -7,7 +7,11 @@ import { sampleQuizzes } from "@/data/sampleQuizData";
 vi.mock("../SingleQuizView", () => ({
     default: ({ onComplete }: { onComplete: () => void }) => (
         <div data-testid="mock-single-quiz-view">
-            <button onClick={onComplete} data-testid="trigger-complete">
+            <button
+                onClick={onComplete}
+                data-testid="trigger-complete"
+                type="button"
+            >
                 Complete Quiz
             </button>
         </div>
@@ -17,7 +21,11 @@ vi.mock("../SingleQuizView", () => ({
 vi.mock("../QuizComplete", () => ({
     default: ({ onRestart }: { onRestart: () => void }) => (
         <div data-testid="mock-quiz-complete">
-            <button onClick={onRestart} data-testid="trigger-restart">
+            <button
+                onClick={onRestart}
+                data-testid="trigger-restart"
+                type="button"
+            >
                 Restart
             </button>
         </div>

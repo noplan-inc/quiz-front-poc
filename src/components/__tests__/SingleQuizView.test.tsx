@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, act, fireEvent } from "@testing-library/react";
+import React from "react";
 import SingleQuizView from "../SingleQuizView";
 import type { QuizProps } from "@/types/quiz";
 
@@ -7,7 +8,11 @@ import type { QuizProps } from "@/types/quiz";
 vi.mock("../quiz", () => ({
     QuizItem: ({ onAnswer }: { onAnswer: (id: string) => void }) => (
         <div data-testid="mock-quiz-item">
-            <button data-testid="answer-button" onClick={() => onAnswer("a")}>
+            <button
+                data-testid="answer-button"
+                onClick={() => onAnswer("a")}
+                type="button"
+            >
                 回答する
             </button>
         </div>
@@ -17,9 +22,11 @@ vi.mock("../quiz", () => ({
 // framer-motionのモック
 vi.mock("framer-motion", () => ({
     motion: {
-        div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+        div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+            <div {...props}>{children}</div>
+        ),
     },
-    AnimatePresence: ({ children }: any) => <>{children}</>,
+    AnimatePresence: ({ children }: React.PropsWithChildren) => <>{children}</>,
 }));
 
 // setTimeoutのモック

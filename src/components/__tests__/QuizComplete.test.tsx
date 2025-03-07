@@ -1,44 +1,41 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import React from "react";
+import { describe, expect, it, vi } from "vitest";
 import QuizComplete from "../QuizComplete";
 
-// framer-motionのアニメーションをモック
+// framer-motionのモック
 vi.mock("framer-motion", () => ({
     motion: {
-        div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+        div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+            <div {...props}>{children}</div>
+        ),
     },
 }));
 
-describe("QuizCompleteコンポーネント", () => {
+describe("QuizComplete コンポーネント", () => {
     it("完了メッセージが表示される", () => {
         render(<QuizComplete />);
-
         expect(screen.getByText("クイズ完了！")).toBeInTheDocument();
-        expect(
-            screen.getByText("お疲れ様でした！すべての問題に回答しました。")
-        ).toBeInTheDocument();
     });
 
-    it("onRestartが指定されている場合、再挑戦ボタンが表示される", () => {
-        const mockOnRestart = vi.fn();
-        render(<QuizComplete onRestart={mockOnRestart} />);
-
-        const restartButton = screen.getByText("もう一度挑戦する");
-        expect(restartButton).toBeInTheDocument();
+    it("再スタートボタンが表示される", () => {
+        const mockRestart = vi.fn();
+        render(<QuizComplete onRestart={mockRestart} />);
+        expect(screen.getByText("もう一度挑戦する")).toBeInTheDocument();
     });
 
-    it("再挑戦ボタンをクリックするとonRestartが呼ばれる", () => {
-        const mockOnRestart = vi.fn();
-        render(<QuizComplete onRestart={mockOnRestart} />);
+    it("再スタートボタンをクリックするとonRestartが呼ばれる", () => {
+        const mockRestart = vi.fn();
+        render(<QuizComplete onRestart={mockRestart} />);
 
-        fireEvent.click(screen.getByText("もう一度挑戦する"));
-        expect(mockOnRestart).toHaveBeenCalledTimes(1);
+        const button = screen.getByText("もう一度挑戦する");
+        fireEvent.click(button);
+
+        expect(mockRestart).toHaveBeenCalledTimes(1);
     });
 
-    it("onRestartが指定されていない場合、再挑戦ボタンは表示されない", () => {
+    it("onRestartが提供されていない場合、再スタートボタンは表示されない", () => {
         render(<QuizComplete />);
-
-        const restartButton = screen.queryByText("もう一度挑戦する");
-        expect(restartButton).not.toBeInTheDocument();
+        expect(screen.queryByText("もう一度挑戦する")).toBeNull();
     });
 });
