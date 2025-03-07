@@ -5,11 +5,29 @@ import type { ChoiceStatus } from "./ChoiceList";
 import { ImageChoiceQuiz } from "./ImageChoiceQuiz";
 import ImageQuiz from "./ImageQuiz";
 import { MultiAnswerQuiz } from "./MultiAnswerQuiz";
+import { OrderSelectionQuiz } from "./OrderSelectionQuiz";
 import TextQuiz from "./TextQuiz";
 import VideoQuiz from "./VideoQuiz";
 
 /**
  * 問題タイプに応じたコンポーネントを表示するラッパーコンポーネント
+ *
+ * 【現在サポートされているクイズタイプ】
+ * - text: テキストのみの問題
+ * - image: 画像付きの問題
+ * - video: 動画付きの問題
+ * - audio: 音声付きの問題
+ * - imageChoice: 選択肢が画像の問題
+ * - multiAnswer: 複数回答可能な問題
+ * - orderSelection: 順序選択問題
+ *
+ * 【未実装のクイズタイプ】
+ * - characterOrder: 文字の順序選択問題
+ * - combination: 組み合わせ選択問題
+ * - numberInput: 数字入力問題
+ *
+ * 注意: 未実装のクイズタイプを使用すると「未対応の問題タイプです」エラーが表示されます。
+ * sampleQuizData.ts のデータでは、必ず現在サポートされているタイプのみを使用してください。
  */
 const QuizItem: React.FC<QuizProps> = (props) => {
     const [selectedChoiceId, setSelectedChoiceId] = useState<string | null>(
@@ -62,9 +80,10 @@ const QuizItem: React.FC<QuizProps> = (props) => {
         case "multiAnswer":
             return <MultiAnswerQuiz {...props} />;
 
-        // 他のクイズタイプが実装されたら、ここに追加
-        // case "orderSelection":
-        //   return <OrderSelectionQuiz {...props} />;
+        case "orderSelection":
+            return <OrderSelectionQuiz {...props} />;
+
+        // 未実装のクイズタイプ - 今後実装する予定のものをコメントとして残す
         // case "characterOrder":
         //   return <CharacterOrderQuiz {...props} />;
         // case "combination":

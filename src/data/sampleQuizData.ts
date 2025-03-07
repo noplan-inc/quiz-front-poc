@@ -1,161 +1,178 @@
 import type { QuizProps } from "@/types/quiz";
 
 export const sampleQuizzes: QuizProps[] = [
-    // タイプ0: 一問一答(2択) - テキスト問題文
+    // 1. テキスト問題 (4択)
     {
-        id: "0-1",
+        id: "1",
         type: "text",
-        question: "JavaScriptの拡張言語はどれですか？",
+        question: "プログラミングにおいて「DRY原則」とは何の略称ですか？",
         choices: [
-            { id: "a", text: "TypeScript", isCorrect: true },
-            { id: "b", text: "CoffeeScript", isCorrect: false },
+            { id: "a", text: "Do Repeat Yourself", isCorrect: false },
+            { id: "b", text: "Don't Repeat Yourself", isCorrect: true },
+            { id: "c", text: "Define Reusable Yield", isCorrect: false },
+            { id: "d", text: "Document Regularly Yearly", isCorrect: false },
         ],
         onAnswer: () => {},
     },
 
-    // タイプ0: 一問一答(2択) - テキスト&画像問題
+    // 2. 画像付きの問題 (4択)
     {
-        id: "0-2",
+        id: "2",
         type: "image",
-        question: "この画像はどの都市の風景ですか？",
-        imageUrl: "https://picsum.photos/id/1018/600/400",
-        imageAlt: "都市の風景",
+        question: "この画像は何を表していますか？",
+        imageUrl: "https://picsum.photos/id/0/500/300",
+        imageAlt: "ノートパソコンとコーヒーカップの画像",
         choices: [
-            { id: "a", text: "東京", isCorrect: false },
-            { id: "b", text: "京都", isCorrect: true },
+            { id: "a", text: "プログラミング環境", isCorrect: true },
+            { id: "b", text: "カフェの風景", isCorrect: false },
+            { id: "c", text: "オフィスデスク", isCorrect: false },
+            { id: "d", text: "デジタルアート", isCorrect: false },
         ],
         onAnswer: () => {},
     },
 
-    // タイプ0: 一問一答(2択) - テキスト&動画問題
+    // 3. 動画付きの問題 (4択)
     {
-        id: "0-3",
+        id: "3",
         type: "video",
-        question: "このビデオでは何について説明していますか？",
+        question: "この動画で主に紹介されているのは何ですか？",
         videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
-        poster: "https://www.w3schools.com/images/w3schools_logo_436_2.png",
+        poster: "https://www.w3schools.com/images/picture.jpg",
         choices: [
-            { id: "a", text: "プログラミング言語", isCorrect: false },
-            { id: "b", text: "自然の風景", isCorrect: true },
+            { id: "a", text: "宇宙の風景", isCorrect: false },
+            { id: "b", text: "都市の景観", isCorrect: false },
+            { id: "c", text: "自然の生態系", isCorrect: true },
+            { id: "d", text: "海洋生物", isCorrect: false },
         ],
         onAnswer: () => {},
     },
 
-    // タイプ0: 一問一答(2択) - テキスト&音声問題
+    // 4. 音声付きの問題 (4択)
     {
-        id: "0-4",
+        id: "4",
         type: "audio",
-        question: "この音声で聞こえる楽器は何ですか？",
+        question: "この音声で聞こえる動物は何ですか？",
         audioUrl: "https://www.w3schools.com/html/horse.mp3",
         choices: [
-            { id: "a", text: "ピアノ", isCorrect: false },
-            { id: "b", text: "ドラム", isCorrect: true },
+            { id: "a", text: "犬", isCorrect: false },
+            { id: "b", text: "猫", isCorrect: false },
+            { id: "c", text: "馬", isCorrect: true },
+            { id: "d", text: "鳥", isCorrect: false },
         ],
         onAnswer: () => {},
     },
 
-    // タイプ1: 一問一答(2択) 選択肢が画像ver - テキスト問題文
+    // 5. 選択肢が画像の問題
     {
-        id: "1-1",
+        id: "5",
         type: "imageChoice",
-        question: "正しいロゴはどちらですか？",
+        question: "次のうち、Reactのロゴはどれですか？",
         choices: [
             {
                 id: "a",
                 imageUrl:
-                    "https://www.w3schools.com/images/w3schools_logo_436_2.png",
-                imageAlt: "W3Schoolsロゴ",
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png",
+                imageAlt: "Reactロゴ",
                 isCorrect: true,
             },
             {
                 id: "b",
-                imageUrl: "https://picsum.photos/id/237/200/100",
-                imageAlt: "別のロゴ",
+                imageUrl:
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/512px-Vue.js_Logo_2.svg.png",
+                imageAlt: "Vueロゴ",
+                isCorrect: false,
+            },
+            {
+                id: "c",
+                imageUrl:
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/512px-Angular_full_color_logo.svg.png",
+                imageAlt: "Angularロゴ",
+                isCorrect: false,
+            },
+            {
+                id: "d",
+                imageUrl:
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/512px-Unofficial_JavaScript_logo_2.svg.png",
+                imageAlt: "JavaScriptロゴ",
                 isCorrect: false,
             },
         ],
         onAnswer: () => {},
     },
 
-    // タイプ1: 一問一答(2択) 選択肢が画像ver - テキスト&音声問題
+    // 6. 複数回答可能な問題
     {
-        id: "1-2",
-        type: "imageChoice",
-        question: "この音声に最も関連する画像はどちらですか？",
-        audioUrl: "https://www.w3schools.com/html/horse.mp3",
-        choices: [
-            {
-                id: "a",
-                imageUrl: "https://picsum.photos/id/237/200/200",
-                imageAlt: "犬の画像",
-                isCorrect: false,
-            },
-            {
-                id: "b",
-                imageUrl: "https://picsum.photos/id/1074/200/200",
-                imageAlt: "馬の画像",
-                isCorrect: true,
-            },
-        ],
-        onAnswer: () => {},
-    },
-
-    // タイプ2: 一問一答(4択) - テキスト問題文
-    {
-        id: "2-1",
-        type: "text",
-        question: "次のうち、日本の首都はどれですか？",
-        choices: [
-            { id: "a", text: "大阪", isCorrect: false },
-            { id: "b", text: "京都", isCorrect: false },
-            { id: "c", text: "東京", isCorrect: true },
-            { id: "d", text: "横浜", isCorrect: false },
-        ],
-        onAnswer: () => {},
-    },
-
-    // タイプ2: 一問一答(4択) - テキスト&画像問題
-    {
-        id: "2-2",
-        type: "image",
-        question: "この画像はどの動物ですか？",
-        imageUrl: "https://picsum.photos/id/237/400/300",
-        imageAlt: "動物の写真",
-        choices: [
-            { id: "a", text: "猫", isCorrect: false },
-            { id: "b", text: "犬", isCorrect: true },
-            { id: "c", text: "うさぎ", isCorrect: false },
-            { id: "d", text: "ハムスター", isCorrect: false },
-        ],
-        onAnswer: () => {},
-    },
-
-    // タイプ4: 一問多答(4択) - テキスト問題文
-    {
-        id: "4-1",
+        id: "6",
         type: "multiAnswer",
-        question: "次のうち、果物はどれですか？（複数選択可）",
+        question:
+            "次のうち、JavaScriptのフレームワークはどれですか？（複数選択可）",
         choices: [
-            { id: "a", text: "りんご", isCorrect: true },
-            { id: "b", text: "トマト", isCorrect: true },
-            { id: "c", text: "じゃがいも", isCorrect: false },
-            { id: "d", text: "キュウリ", isCorrect: false },
+            { id: "a", text: "React", isCorrect: true },
+            { id: "b", text: "Angular", isCorrect: true },
+            { id: "c", text: "Django", isCorrect: false },
+            { id: "d", text: "Vue.js", isCorrect: true },
         ],
         onAnswer: () => {},
     },
 
-    // タイプ4: 一問多答(4択) - テキスト&画像問題
+    // 7. 順序選択問題
     {
-        id: "4-2",
-        type: "multiAnswer",
-        question: "この画像の中に含まれるものをすべて選んでください",
-        imageUrl: "https://picsum.photos/id/1084/400/300",
-        imageAlt: "風景写真",
+        id: "7",
+        type: "orderSelection",
+        question: "ソフトウェア開発ライフサイクルの正しい順序を選んでください",
         choices: [
-            { id: "a", text: "山", isCorrect: true },
-            { id: "b", text: "川", isCorrect: true },
-            { id: "c", text: "建物", isCorrect: false },
-            { id: "d", text: "自動車", isCorrect: false },
+            { id: "a", text: "計画", order: 1 },
+            { id: "b", text: "分析", order: 2 },
+            { id: "c", text: "設計", order: 3 },
+            { id: "d", text: "実装", order: 4 },
+            { id: "e", text: "テスト", order: 5 },
+            { id: "f", text: "運用・保守", order: 6 },
+        ],
+        onAnswer: () => {},
+    },
+
+    // 8. 画像付きの順序選択問題
+    {
+        id: "8",
+        type: "orderSelection",
+        question: "ソフトウェア開発のステップを正しい順序に並べてください",
+        imageUrl: "https://picsum.photos/id/0/500/300",
+        imageAlt: "ソフトウェア開発の図",
+        choices: [
+            { id: "a", text: "要件定義", order: 1 },
+            { id: "b", text: "設計", order: 2 },
+            { id: "c", text: "実装", order: 3 },
+            { id: "d", text: "テスト", order: 4 },
+            { id: "e", text: "デプロイ", order: 5 },
+        ],
+        onAnswer: () => {},
+    },
+
+    // 9. 音声付きの問題 (別バージョン)
+    {
+        id: "9",
+        type: "audio",
+        question: "この音声で説明されているのは何についてですか？",
+        audioUrl: "https://www.w3schools.com/tags/horse.ogg",
+        choices: [
+            { id: "a", text: "プログラミング言語", isCorrect: false },
+            { id: "b", text: "データベース", isCorrect: false },
+            { id: "c", text: "動物の鳴き声", isCorrect: true },
+            { id: "d", text: "自然環境", isCorrect: false },
+        ],
+        onAnswer: () => {},
+    },
+
+    // 10. 複数回答可能な問題 (別バージョン)
+    {
+        id: "10",
+        type: "multiAnswer",
+        question: "次のうち、モバイルOSはどれですか？（複数選択可）",
+        choices: [
+            { id: "a", text: "iOS", isCorrect: true },
+            { id: "b", text: "Android", isCorrect: true },
+            { id: "c", text: "Windows", isCorrect: false },
+            { id: "d", text: "MacOS", isCorrect: false },
         ],
         onAnswer: () => {},
     },
