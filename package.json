@@ -13,9 +13,9 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "typecheck": "tsc --noEmit",
-        "deploy": "pnpm build && wrangler pages deploy dist",
-        "deploy:dev": "pnpm build && wrangler pages deploy dist --branch=development",
-        "deploy:preview": "pnpm build && wrangler pages deploy dist --branch=preview"
+        "deploy": "pnpm build && wrangler pages deploy dist --project-name=quiz-front-poc",
+        "deploy:dev": "pnpm build && wrangler pages deploy dist --project-name=quiz-front-poc-dev --branch=development",
+        "deploy:preview": "pnpm build && wrangler pages deploy dist --project-name=quiz-front-poc-preview --branch=preview"
     },
     "dependencies": {
         "class-variance-authority": "^0.7.1",

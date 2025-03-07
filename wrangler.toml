@@ -2,11 +2,7 @@ name = "quiz-front-poc"
 compatibility_date = "2023-12-01"
 
 # ビルド設定
-[build]
-command = "pnpm build"      # ビルドコマンド
-upload.format = "directory" # ディレクトリアップロード形式
-upload.dir = "dist"         # ビルド出力ディレクトリ
-output_dir = "dist"         # Cloudflareが配信するディレクトリ
+pages_build_output_dir = "./dist" # ビルド出力ディレクトリ（pages_build_output_dirが最新の書き方）
 
 # 環境設定
 [site]
