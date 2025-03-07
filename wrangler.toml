@@ -1,0 +1,33 @@
+name = "quiz-front-poc"
+compatibility_date = "2023-12-01"
+
+# ビルド設定
+[build]
+command = "pnpm build"      # ビルドコマンド
+upload.format = "directory" # ディレクトリアップロード形式
+upload.dir = "dist"         # ビルド出力ディレクトリ
+output_dir = "dist"         # Cloudflareが配信するディレクトリ
+
+# 環境設定
+[site]
+bucket = "./dist" # 静的ファイルが置かれるディレクトリ
+
+# 環境変数設定
+[vars]
+NODE_ENV = "production"
+
+# 本番環境設定
+[env.production]
+name = "quiz-front-poc"
+route = ""
+workers_dev = false
+
+# 開発環境設定
+[env.development]
+name = "quiz-front-poc-dev"
+workers_dev = true
+
+# プレビュー環境用の設定（PR用など）
+[env.preview]
+name = "quiz-front-poc-preview"
+workers_dev = true
