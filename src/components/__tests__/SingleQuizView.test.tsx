@@ -69,8 +69,8 @@ describe("SingleQuizViewコンポーネント", () => {
             <SingleQuizView quizzes={mockQuizzes} onComplete={mockOnComplete} />
         );
 
-        // 進行状況が表示されていることを確認
-        expect(screen.getByText("問題 1/2")).toBeInTheDocument();
+        // 進行状況が表示されていることを確認（新デザインでは「第1問」という表示に変更）
+        expect(screen.getByText("第1問")).toBeInTheDocument();
         expect(screen.getByTestId("mock-quiz-item")).toBeInTheDocument();
     });
 
@@ -83,18 +83,19 @@ describe("SingleQuizViewコンポーネント", () => {
         // 回答ボタンをクリック
         fireEvent.click(screen.getByTestId("answer-button"));
 
-        // 最初のタイマーをスキップ (回答から次の問題への遷移)
-        act(() => {
-            vi.advanceTimersByTime(1000);
-        });
+        // 「つぎへ」ボタンが表示されることを確認
+        expect(screen.getByText("つぎへ")).toBeInTheDocument();
 
-        // 次のタイマーをスキップ (アニメーション時間)
+        // 「つぎへ」ボタンをクリック
+        fireEvent.click(screen.getByText("つぎへ"));
+
+        // アニメーション時間をスキップ
         act(() => {
             vi.advanceTimersByTime(500);
         });
 
-        // 2問目に進んだことを確認
-        expect(screen.getByText("問題 2/2")).toBeInTheDocument();
+        // 2問目に進んだことを確認（新デザインでは「第2問」という表示に変更）
+        expect(screen.getByText("第2問")).toBeInTheDocument();
     });
 
     it("全ての問題に回答後、onCompleteが呼ばれる", () => {
@@ -106,10 +107,10 @@ describe("SingleQuizViewコンポーネント", () => {
         // 1問目の回答
         fireEvent.click(screen.getByTestId("answer-button"));
 
-        // タイマーをスキップ
-        act(() => {
-            vi.advanceTimersByTime(1000);
-        });
+        // 「つぎへ」ボタンをクリック
+        fireEvent.click(screen.getByText("つぎへ"));
+
+        // アニメーション時間をスキップ
         act(() => {
             vi.advanceTimersByTime(500);
         });
@@ -117,9 +118,12 @@ describe("SingleQuizViewコンポーネント", () => {
         // 2問目の回答
         fireEvent.click(screen.getByTestId("answer-button"));
 
-        // タイマーをスキップ
+        // 「つぎへ」ボタンをクリック
+        fireEvent.click(screen.getByText("つぎへ"));
+
+        // アニメーション時間をスキップ
         act(() => {
-            vi.advanceTimersByTime(1000);
+            vi.advanceTimersByTime(500);
         });
 
         // onCompleteが呼ばれたことを確認

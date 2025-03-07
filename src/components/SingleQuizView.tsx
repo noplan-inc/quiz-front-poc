@@ -1,6 +1,6 @@
 import type { QuizProps } from "@/types/quiz";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuizItem } from "./quiz";
 
 interface SingleQuizViewProps {
@@ -14,10 +14,29 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
 }) => {
     const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
     const [direction, setDirection] = useState(0); // -1: 前へ, 0: 初期, 1: 次へ
-    const [_answered, setAnswered] = useState(false);
+    const [answered, setAnswered] = useState(false);
+    const [elapsedTime, setElapsedTime] = useState(0);
 
     // 現在表示中のクイズ
     const currentQuiz = quizzes[currentQuizIndex];
+
+    // タイマーの設定
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setElapsedTime((prev) => prev + 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    // 経過時間の表示形式
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, "0")}:${secs
+            .toString()
+            .padStart(2, "0")}`;
+    };
 
     // 次の問題へ
     const goToNextQuiz = () => {
@@ -38,11 +57,13 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     // 回答処理
     const handleAnswer = (_choiceId: string | string[]) => {
         setAnswered(true);
+    };
 
-        // 回答から1秒後に次の問題へ
-        setTimeout(() => {
+    // 次へボタンのハンドラー
+    const handleNext = () => {
+        if (answered) {
             goToNextQuiz();
-        }, 1000);
+        }
     };
 
     // アニメーションのバリアント
@@ -62,31 +83,18 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="w-full max-w-2xl mx-auto">
-                {/* 進捗インジケーター */}
-                <div className="mb-6 px-4">
-                    <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium">
-                            問題 {currentQuizIndex + 1}/{quizzes.length}
-                        </span>
-                        <div className="w-full mx-4 bg-gray-200 rounded-full h-2.5">
-                            <div
-                                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                                style={{
-                                    width: `${
-                                        ((currentQuizIndex + 1) /
-                                            quizzes.length) *
-                                        100
-                                    }%`,
-                                }}
-                            />
-                        </div>
-                    </div>
+        <div className="min-h-screen flex items-center justify-center bg-white">
+            {/* ストライプの背景パターン */}
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
+
+            <div className="w-full max-w-2xl mx-auto p-4 relative">
+                {/* 問題番号表示 */}
+                <div className="bg-red-600 text-white font-bold py-2 px-4 mb-4 text-center rounded-t-lg">
+                    第{currentQuizIndex + 1}問
                 </div>
 
                 {/* クイズ表示エリア */}
-                <div className="relative h-[70vh] flex items-center justify-center">
+                <div className="relative">
                     <AnimatePresence mode="wait" custom={direction}>
                         <motion.div
                             key={currentQuizIndex}
@@ -103,7 +111,7 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
                                 },
                                 opacity: { duration: 0.2 },
                             }}
-                            className="absolute w-full px-4"
+                            className="w-full"
                         >
                             <QuizItem
                                 {...currentQuiz}
@@ -111,6 +119,43 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
                             />
                         </motion.div>
                     </AnimatePresence>
+                </div>
+
+                {/* フッター部分: タイマーと次へボタン */}
+                <div className="mt-6 flex justify-between items-center">
+                    {/* タイマー */}
+                    <div className="bg-gray-200 rounded-full py-2 px-6 flex items-center">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 mr-2 text-gray-600"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            aria-label="タイマー"
+                        >
+                            <title>タイマーアイコン</title>
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
+                        <span className="font-mono font-bold">
+                            {formatTime(elapsedTime)}
+                        </span>
+                    </div>
+
+                    {/* 次へボタン */}
+                    {answered && (
+                        <button
+                            onClick={handleNext}
+                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-md transition-colors"
+                            type="button"
+                        >
+                            つぎへ
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
