@@ -32,7 +32,7 @@ const VideoQuiz: React.FC<VideoQuizComponentProps> = ({
                     src={videoUrl}
                     poster={poster}
                     controls
-                    className="max-w-full max-h-full object-contain rounded-lg"
+                    className="max-w-full max-h-full object-contain rounded-lg border-2 border-gray-300"
                     data-testid="question-video"
                 >
                     <track kind="captions" src="" label="日本語" />
