@@ -75,16 +75,16 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
     };
 
     return (
-        <div className="min-h-screen flex flex-col">
-            {/* メインコンテンツエリア */}
-            <div className="flex-grow flex items-center justify-center bg-white pb-20">
-                {/* ストライプの背景パターン */}
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
+        <div className="min-h-screen flex flex-col relative">
+            {/* ストライプの背景パターン */}
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-red-50 bg-stripes bg-stripes-pink opacity-30" />
 
-                <div className="w-full max-w-2xl mx-auto p-4 relative">
-                    {/* クイズ全体のコンテナ（ヘッダー + 本体） */}
+            {/* メインコンテンツエリア - フッターの高さ分のパディングを追加 */}
+            <div className="flex-grow flex items-center justify-center bg-white">
+                <div className="w-full max-w-2xl mx-auto p-4 relative pb-24">
+                    {/* クイズ全体のコンテナ */}
                     <div className="w-full quiz-container">
-                        {/* クイズ表示エリア（ヘッダー + 本体をアニメーションで一緒に動かす） */}
+                        {/* クイズ表示エリア（本体のみをアニメーションで動かす） */}
                         <div className="relative">
                             <AnimatePresence mode="wait" custom={direction}>
                                 <motion.div
@@ -104,7 +104,7 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
                                     }}
                                     className="w-full"
                                 >
-                                    {/* 問題番号表示（アニメーション内に移動） */}
+                                    {/* 問題番号表示 */}
                                     <div className="bg-red-600 text-white font-bold py-3 px-4 text-center rounded-t-lg border-4 border-red-600 border-b-0">
                                         第{currentQuizIndex + 1}問
                                     </div>
@@ -122,11 +122,13 @@ const SingleQuizView: React.FC<SingleQuizViewProps> = ({
             </div>
 
             {/* フッターコンポーネント - 固定位置で常に表示 */}
-            <QuizFooter
-                elapsedTime={elapsedTime}
-                answered={answered}
-                onNext={handleNext}
-            />
+            <div className="sticky bottom-0 left-0 right-0 z-50">
+                <QuizFooter
+                    elapsedTime={elapsedTime}
+                    answered={answered}
+                    onNext={handleNext}
+                />
+            </div>
         </div>
     );
 };
