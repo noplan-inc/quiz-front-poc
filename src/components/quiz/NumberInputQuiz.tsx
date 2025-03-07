@@ -17,15 +17,20 @@ export const NumberInputQuiz: React.FC<
     // 正解かどうか
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-    // 入力値の変更を処理
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 数字をタップして追加
+    const handleNumberClick = (num: number) => {
         if (isAnswered) return;
 
-        const value = e.target.value;
-        // 数字以外の入力を許可しない
-        if (/^\d*$/.test(value) && value.length <= maxDigits) {
-            setInputValue(value);
+        // 既存の桁数制限を超えないように確認
+        if (inputValue.length < maxDigits) {
+            setInputValue((prev) => prev + num.toString());
         }
+    };
+
+    // 最後の数字を削除
+    const handleBackspace = () => {
+        if (isAnswered) return;
+        setInputValue((prev) => prev.slice(0, -1));
     };
 
     // 回答を確認
@@ -42,97 +47,107 @@ export const NumberInputQuiz: React.FC<
         onAnswer(inputValue);
     };
 
-    // Enterキーでも回答を確定できるようにする
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && !isAnswered && inputValue) {
-            checkAnswer();
-        }
-    };
-
     return (
-        <div className="p-4 bg-white rounded-lg shadow">
-            {/* 問題文 */}
-            <h2 className="text-xl font-bold mb-4">{question}</h2>
+        <div className="w-full">
+            {/* クイズボックス */}
+            <div className="border-4 border-red-600 rounded-lg bg-white overflow-hidden flex flex-col">
+                {/* ヘッダー部分 */}
+                <div className="bg-red-600 p-3 text-white text-center font-bold">
+                    第3問
+                </div>
 
-            {/* 画像があれば表示 */}
-            {imageUrl && (
-                <div className="mb-4">
-                    <img
-                        src={imageUrl}
-                        alt={imageAlt || "問題の画像"}
-                        className="max-w-full rounded"
-                    />
+                {/* 問題文と画像 */}
+                <div className="p-6">
+                    <h2 className="text-xl font-bold text-indigo-950 mb-4">
+                        {question}
+                    </h2>
+
+                    {/* 画像があれば表示 */}
+                    {imageUrl && (
+                        <div className="mb-6">
+                            <img
+                                src={imageUrl}
+                                alt={imageAlt || "問題の画像"}
+                                className="w-full h-auto rounded-md"
+                            />
+                        </div>
+                    )}
+
+                    {/* 入力表示エリア */}
+                    <div className="flex justify-between space-x-2 mb-6">
+                        <div
+                            className="flex-1 bg-gray-100 p-3 rounded-md text-center text-2xl font-bold"
+                            data-testid="number-input-display"
+                        >
+                            {inputValue || "\u00A0"}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={handleBackspace}
+                            disabled={isAnswered || !inputValue.length}
+                            className="px-4 py-2 rounded-md bg-indigo-950 text-white font-bold disabled:opacity-50"
+                        >
+                            削除
+                        </button>
+                    </div>
+
+                    {/* 数字キーパッド */}
+                    <div className="grid grid-cols-3 gap-3">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((num) => (
+                            <button
+                                key={num}
+                                type="button"
+                                onClick={() => handleNumberClick(num)}
+                                disabled={
+                                    isAnswered || inputValue.length >= maxDigits
+                                }
+                                className={`
+                                    py-4 text-xl font-bold rounded-md bg-indigo-950 text-white
+                                    ${num === 0 ? "col-span-3" : ""}
+                                    ${
+                                        isAnswered ||
+                                        inputValue.length >= maxDigits
+                                            ? "opacity-50"
+                                            : "hover:opacity-90"
+                                    }
+                                `}
+                            >
+                                {num}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* 「つぎへ」ボタン（回答後に表示） */}
+            {isAnswered && (
+                <div className="mt-4 flex justify-end">
+                    <button
+                        type="button"
+                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
+                    >
+                        つぎへ
+                    </button>
                 </div>
             )}
 
-            {/* 入力フォーム */}
-            <div className="mb-6">
-                <label
-                    htmlFor="number-input"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                    答えを入力してください:
-                </label>
-                <div className="flex space-x-2">
-                    <input
-                        id="number-input"
-                        data-testid="number-input"
-                        type="number"
-                        min="0"
-                        max={10 ** maxDigits - 1}
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        onKeyPress={handleKeyPress}
-                        disabled={isAnswered}
-                        className={`
-                            w-full py-2 px-3 border rounded-md shadow-sm focus:outline-none focus:ring-2 
-                            ${
-                                isAnswered
-                                    ? isCorrect
-                                        ? "border-green-300 focus:ring-green-500"
-                                        : "border-red-300 focus:ring-red-500"
-                                    : "border-gray-300 focus:ring-blue-500"
-                            }
-                        `}
-                        aria-label="数値を入力"
-                        aria-describedby="number-input-description"
-                        placeholder={`${maxDigits}桁以内の数字`}
-                    />
+            {/* 確認ボタン（回答前に表示） */}
+            {!isAnswered && inputValue && (
+                <div className="mt-4 flex justify-end">
                     <button
                         type="button"
                         data-testid="submit-button"
                         onClick={checkAnswer}
-                        disabled={isAnswered || !inputValue}
-                        className={`
-                            px-4 py-2 rounded font-medium 
-                            ${
-                                isAnswered || !inputValue
-                                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                    : "bg-blue-500 text-white hover:bg-blue-600"
-                            }
-                        `}
-                        aria-disabled={isAnswered || !inputValue}
+                        className="px-6 py-2 rounded-md bg-red-600 text-white font-bold hover:bg-red-700 transition-colors"
                     >
                         確認
                     </button>
                 </div>
-                <p
-                    id="number-input-description"
-                    className="mt-1 text-sm text-gray-600"
-                >
-                    {maxDigits}桁以内の数字を入力してください
-                </p>
-            </div>
+            )}
 
-            {/* 回答後のフィードバック */}
+            {/* 回答結果のフィードバック */}
             {isAnswered && (
-                <div
-                    className={`mt-4 p-3 rounded ${
-                        isCorrect
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                    }`}
-                >
+                <div className="mt-4 p-3 rounded bg-gray-100">
                     {isCorrect
                         ? "正解です！"
                         : `不正解です。正解は「${correctAnswer}」です。`}
