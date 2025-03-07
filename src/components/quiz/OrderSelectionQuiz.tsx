@@ -1,5 +1,5 @@
 import type { OrderSelectionQuizProps } from "@/types/quiz";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import type { DropTargetMonitor, DragSourceMonitor } from "react-dnd";
@@ -135,6 +135,8 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
     isCorrect,
     moveItem,
 }) => {
+    const ref = useRef<HTMLDivElement>(null);
+
     // ドラッグ&ドロップの実装
     const [{ isDragging }, drag] = useDrag({
         type: "item",
@@ -142,7 +144,7 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
         collect: (monitor: DragSourceMonitor) => ({
             isDragging: monitor.isDragging(),
         }),
-        canDrag: !isAnswered, // 回答済みの場合はドラッグ不可
+        canDrag: () => !isAnswered, // 回答済みの場合はドラッグ不可
     });
 
     const [, drop] = useDrop({
@@ -165,8 +167,11 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
             // ドラッグしている項目のインデックスを更新
             item.index = hoverIndex;
         },
-        canDrop: !isAnswered, // 回答済みの場合はドロップ不可
+        canDrop: () => !isAnswered, // 回答済みの場合はドロップ不可
     });
+
+    // ドラッグとドロップの参照を組み合わせる
+    drag(drop(ref));
 
     // ドラッグ中のスタイル
     const opacity = isDragging ? 0.5 : 1;
@@ -179,7 +184,7 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
 
     return (
         <div
-            ref={(node) => drag(drop(node))}
+            ref={ref}
             draggable={!isAnswered}
             className={`p-3 border rounded cursor-move flex items-center ${backgroundColor}`}
             style={{ opacity }}
@@ -195,7 +200,10 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        aria-labelledby="drag-handle-title"
+                        role="img"
                     >
+                        <title id="drag-handle-title">ドラッグハンドル</title>
                         <path
                             strokeLinecap="round"
                             strokeLinejoin="round"

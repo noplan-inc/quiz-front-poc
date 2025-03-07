@@ -1,7 +1,7 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, cleanup, fireEvent } from "@testing-library/react";
-import { OrderSelectionQuiz } from "../OrderSelectionQuiz";
 import type { OrderSelectionQuizProps } from "@/types/quiz";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { OrderSelectionQuiz } from "../OrderSelectionQuiz";
 
 // モックを作成
 vi.mock("react-dnd", () => ({
