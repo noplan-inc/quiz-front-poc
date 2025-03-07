@@ -1,4 +1,4 @@
-import { Choice } from "@/types/quiz";
+import type { Choice } from "@/types/quiz";
 
 export type ChoiceStatus = "default" | "correct" | "incorrect";
 
@@ -43,6 +43,7 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                         disabled={isAnswered}
                         data-testid={`choice-${choice.id}`}
                         aria-disabled={isAnswered}
+                        type="button"
                     >
                         {choice.text}
                         {isAnswered && choice.isCorrect && (

@@ -1,5 +1,5 @@
-import { VideoQuizProps, Choice } from "@/types/quiz";
-import ChoiceList, { ChoiceStatus } from "./ChoiceList";
+import type { Choice, VideoQuizProps } from "@/types/quiz";
+import ChoiceList, { type ChoiceStatus } from "./ChoiceList";
 
 interface VideoQuizComponentProps extends VideoQuizProps {
     selectedChoiceId: string | null;
@@ -34,7 +34,10 @@ const VideoQuiz: React.FC<VideoQuizComponentProps> = ({
                     controls
                     className="max-w-full h-auto rounded-lg mx-auto"
                     data-testid="question-video"
-                />
+                >
+                    <track kind="captions" src="" label="日本語" />
+                    動画プレーヤーは現在のブラウザでサポートされていません。
+                </video>
             </div>
 
             <ChoiceList

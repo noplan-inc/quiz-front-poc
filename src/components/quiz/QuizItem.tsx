@@ -1,10 +1,10 @@
+import type { Choice, QuizProps } from "@/types/quiz";
 import { useState } from "react";
-import { Choice, QuizProps } from "@/types/quiz";
-import TextQuiz from "./TextQuiz";
-import ImageQuiz from "./ImageQuiz";
-import VideoQuiz from "./VideoQuiz";
 import AudioQuiz from "./AudioQuiz";
-import { ChoiceStatus } from "./ChoiceList";
+import type { ChoiceStatus } from "./ChoiceList";
+import ImageQuiz from "./ImageQuiz";
+import TextQuiz from "./TextQuiz";
+import VideoQuiz from "./VideoQuiz";
 
 /**
  * 問題タイプに応じたコンポーネントを表示するラッパーコンポーネント

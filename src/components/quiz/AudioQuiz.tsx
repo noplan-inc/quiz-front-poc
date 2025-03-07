@@ -1,5 +1,5 @@
-import { AudioQuizProps, Choice } from "@/types/quiz";
-import ChoiceList, { ChoiceStatus } from "./ChoiceList";
+import type { AudioQuizProps, Choice } from "@/types/quiz";
+import ChoiceList, { type ChoiceStatus } from "./ChoiceList";
 
 interface AudioQuizComponentProps extends AudioQuizProps {
     selectedChoiceId: string | null;
@@ -32,7 +32,10 @@ const AudioQuiz: React.FC<AudioQuizComponentProps> = ({
                     controls
                     className="w-full"
                     data-testid="question-audio"
-                />
+                >
+                    <track kind="captions" src="" label="日本語" />
+                    音声プレーヤーは現在のブラウザでサポートされていません。
+                </audio>
             </div>
 
             <ChoiceList
